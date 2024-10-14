@@ -5,9 +5,7 @@ toc: false
 ```js
 import { LineGraph } from "./components/line-graph.js";
 import { Histogram } from "./components/histogram.js";
-// import { Leaderboard } from "./components/leaderboard.js";
-// const start = view(Inputs.date({label: "Start", value: "2021-09-01"}));
-// const end = view(Inputs.date({label: "End", value: "2021-09-30"}));
+import { todayInFormat } from "./utils/todayInFormat.js";
 const SparkRates = FileAttachment("./data/spark-rsr.json").json();
 const SparkNonZeroRates = FileAttachment("./data/spark-rsr-non-zero.json").json();
 const SparkMinerRates = FileAttachment("./data/spark-miners-rsr.json").json();
@@ -23,14 +21,19 @@ const sortedSparkMinerRates = SparkMinerRates.sort((recordA, recordB) => recordB
     <h2>Dashboard</h2>
 </div>
 
+```js
+const start = view(Inputs.date({label: "Start", value: "2024-04-07" }));
+const end = view(Inputs.date({label: "End", value: todayInFormat() }));
+```
+
 
 
 <div class="grid grid-cols-2" style="grid-auto-rows: 600px;">
   <div class="card">${
-    resize((width) => LineGraph(SparkRates, {width, title: "Retrieval Success Rate"}))
+    resize((width) => LineGraph(SparkRates, {width, title: "Retrieval Success Rate", start, end }))
   }</div>
   <div class="card">${
-    resize((width) => LineGraph(SparkNonZeroRates, {width, title: "Non-zero Miners: Retrieval Success Rate"}))
+    resize((width) => LineGraph(SparkNonZeroRates, {width, title: "Non-zero Miners: Retrieval Success Rate", start, end }))
   }</div>
 </div>
 
@@ -43,8 +46,12 @@ const sortedSparkMinerRates = SparkMinerRates.sort((recordA, recordB) => recordB
   }</div>
 </div>
 
+```js
+const search = view(Inputs.search(sortedSparkMinerRates, {placeholder: "Search Storage Providers…"}));
+```
+
 <div class="card" style="padding: 0;">
-  ${Inputs.table(sortedSparkMinerRates, {rows: 16})}
+  ${Inputs.table(search, {rows: 16})}
 </div>
 
 <style>
