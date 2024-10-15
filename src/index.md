@@ -38,6 +38,8 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
   }</div>
 </div>
 
+<h4>Last 30 days</h4>
+
 <div class="grid grid-cols-2" style="grid-auto-rows: 600px;">
   <div class="card">${
     resize((width) => Histogram(SparkMinerRates, { width, thresholds: 10 }))
