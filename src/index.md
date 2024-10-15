@@ -5,7 +5,7 @@ toc: false
 ```js
 import { LineGraph } from "./components/line-graph.js";
 import { Histogram } from "./components/histogram.js";
-import { todayInFormat } from "./utils/todayInFormat.js";
+import { todayInFormat, getDateXDaysAgo } from "./utils/date-utils.js";
 const SparkRates = FileAttachment("./data/spark-rsr.json").json();
 const SparkNonZeroRates = FileAttachment("./data/spark-rsr-non-zero.json").json();
 const SparkMinerRates = FileAttachment("./data/spark-miners-rsr.json").json();
@@ -19,11 +19,12 @@ const sortedSparkMinerRates = SparkMinerRates.sort((recordA, recordB) => recordB
 <div class="hero">
   <h4><img src="media/Spark-logo.png" alt="Spark Logo" /><h4>
     <h2>Dashboard</h2>
+    <h4>🚧 This dashboard is under construction 🚧</h4>
 </div>
 
 ```js
-const start = view(Inputs.date({label: "Start", value: "2024-04-07" }));
-const end = view(Inputs.date({label: "End", value: todayInFormat() }));
+const start = view(Inputs.date({label: "Start", value: getDateXDaysAgo(31) }));
+const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 ```
 
 
