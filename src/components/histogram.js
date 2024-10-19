@@ -5,7 +5,9 @@ export function Histogram(events, { width, thresholds }) {
         y: {grid: true},
         width,
         marks: [
-        Plot.rectY(events, Plot.binX({y: "count"}, {x: {thresholds, value: "success_rate"}, fill: "#FF00E6"})),
+        Plot.rectY(events, Plot.binX({
+            y: "count", title: (elems) =>  `${elems.length} SPs`},
+            {x: {thresholds, value: "success_rate"}, fill: "#FF00E6"})),
         Plot.ruleY([0])
         ],
     })

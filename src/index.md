@@ -17,19 +17,21 @@ const sortedSparkMinerRates = SparkMinerRates.sort((recordA, recordB) => recordB
 ```
 
 <div class="hero">
-  <h4><img src="media/Spark-logo.png" alt="Spark Logo" /><h4>
-    <h2>Dashboard</h2>
-    <h4>🚧 This dashboard is under construction 🚧</h4>
+  <body><img src="media/Spark-logo.png" alt="Spark Logo" width="300" /><body>
+    <h2>Dashboard Beta</h2>
 </div>
 
+<h4>Overall Spark RSR</h4>
+<body>This section shows the overall Spark Retrieval Success Rate Score of Filecoin. You can adjust the date range. Records start on the 7th April 2024.</body>
+
 ```js
-const start = view(Inputs.date({label: "Start", value: getDateXDaysAgo(31) }));
+const start = view(Inputs.date({label: "Start", value: getDateXDaysAgo(180) }));
 const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 ```
 
 
 
-<div class="grid grid-cols-2" style="grid-auto-rows: 600px;">
+<div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
   <div class="card">${
     resize((width) => LineGraph(SparkRates, {width, title: "Retrieval Success Rate", start, end }))
   }</div>
@@ -38,9 +40,15 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
   }</div>
 </div>
 
-<h4>Last 30 days</h4>
+<div class="divider"></div>
 
-<div class="grid grid-cols-2" style="grid-auto-rows: 600px;">
+
+
+<h4>Spark Miner RSR Histograms</h4>
+<body>The following histograms use the Spark RSR values calculated in aggregate for each Filecoin Storage Provider over the past 30 days.</body>
+
+
+<div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
   <div class="card">${
     resize((width) => Histogram(SparkMinerRates, { width, thresholds: 10 }))
   }</div>
@@ -48,6 +56,11 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
     resize((width) => Histogram(nonZeroSparkMinerRates, { width, thresholds: 10 }))
   }</div>
 </div>
+
+<div class="divider"></div>
+
+<h4>Spark Miner RSR Table</h4>
+<body>The following table shows the Spark RSR values calculated in aggregate for each Filecoin Storage Provider over the past 30 days.</body>
 
 ```js
 const search = view(Inputs.search(sortedSparkMinerRates, {placeholder: "Search Storage Providers…"}));
@@ -90,6 +103,10 @@ const search = view(Inputs.search(sortedSparkMinerRates, {placeholder: "Search S
   font-weight: 500;
   line-height: 1.5;
   color: var(--theme-foreground-muted);
+}
+
+.divider {
+  margin: 50px;
 }
 
 @media (min-width: 640px) {
