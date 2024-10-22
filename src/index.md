@@ -51,10 +51,10 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 
 <div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
   <div class="card">${
-    resize((width) => Histogram(SparkMinerRates, { width, thresholds: 10 }))
+    resize((width) => Histogram(SparkMinerRates, { width, title: "Retrieval Success Rate Buckets", thresholds: 10 }))
   }</div>
   <div class="card">${
-    resize((width) => Histogram(nonZeroSparkMinerRates, { width, thresholds: 10 }))
+    resize((width) => Histogram(nonZeroSparkMinerRates, { width, title: "Non-zero Miners: Retrieval Success Rate Buckets", thresholds: 10 }))
   }</div>
 </div>
 

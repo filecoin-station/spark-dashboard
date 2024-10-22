@@ -1,8 +1,10 @@
 import * as Plot from "npm:@observablehq/plot";
 
-export function Histogram(events, { width, thresholds }) {
+export function Histogram(events, { width, title, thresholds }) {
     return Plot.plot({
-        y: {grid: true},
+        y: {grid: true },
+        x: { percent: true },
+        title,
         width,
         marks: [
         Plot.rectY(events, Plot.binX({
