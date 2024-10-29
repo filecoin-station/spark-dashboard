@@ -18,7 +18,7 @@ export function LineGraph(events, {width, height, title, start, end} = {}) {
                 x: "day",
                 y: "success_rate",
                 // z: null, // varying color, not series
-                stroke: "#ff8800",
+                stroke: "#FFBD3F",
                 // curve: ""
             })
         ]
