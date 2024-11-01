@@ -9,6 +9,7 @@ import { todayInFormat, getDateXDaysAgo } from "./utils/date-utils.js";
 const SparkRates = FileAttachment("./data/spark-rsr.json").json();
 const SparkNonZeroRates = FileAttachment("./data/spark-rsr-non-zero.json").json();
 const SparkMinerRates = FileAttachment("./data/spark-miners-rsr.json").json();
+const SparkRetrievalResultCodes = FileAttachment("./data/spark-retrieval-result-codes.json").json();
 ```
 
 ```js
@@ -57,6 +58,86 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
     resize((width) => Histogram(nonZeroSparkMinerRates, { width, title: "Non-zero Miners: Retrieval Success Rate Buckets", thresholds: 10 }))
   }</div>
 </div>
+
+<div class="divider"></div>
+
+<h4>Spark Retrieval Result Codes</h4>
+<body>This section shows the Spark Retrieval Result Codes breakdown. You can adjust the date range. Records exist for the last 90 days.</body>
+
+```js
+const combine = (obj, target, keys) => {
+  obj[target] = keys.reduce((acc, key) => acc + (obj[key] || 0), 0)
+  for (const key of keys) {
+    delete obj[key]
+  }
+}
+const clone = obj => JSON.parse(JSON.stringify(obj))
+const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
+  for (const [key, value] of Object.entries(rates)) {
+    rates[key] = Number(value)
+  }
+
+  combine(rates, 'HTTP_5xx', [
+    'LASSIE_502',
+    'HTTP_500',
+    'HTTP_502',
+    'ERROR_503',
+    'ERROR_522',
+    'ERROR_520',
+    'ERROR_500',
+    'BAD_GATEWAY',
+    'GATEWAY_TIMEOUT'
+  ])
+  combine(rates, 'HTTP_4xx', [
+    'ERROR_429',
+    'ERROR_404',
+    'ERROR_403',
+    'ERROR_408'
+  ])
+  combine(rates, 'IPNI_NOT_ADVERTISED', [
+    'IPNI_ERROR_404',
+    'IPNI_NO_VALID_ADVERTISEMENT',
+  ])
+  combine(rates, 'IPNI_4xx', [
+    'IPNI_ERROR_400',
+    'UNSUPPORTED_MULTIADDR_FORMAT'
+  ])
+  combine(rates, 'IPNI_5xx', [
+    'IPNI_ERROR_500',
+    'IPNI_ERROR_502',
+    'IPNI_ERROR_503',
+    'IPNI_ERROR_504',
+    'IPNI_ERROR_FETCH'
+  ])
+  combine(rates, 'CAR_ERROR', [
+    'CANNOT_PARSE_CAR_FILE',
+    'CAR_TOO_LARGE'
+  ])
+
+  return Object.entries(rates).map(([code, rate]) => ({ day: new Date(day), code, rate }))
+})
+```
+
+<div class="grid grid-cols-1" style="grid-auto-rows: 500px;">
+  <div class="card">
+    ${Plot.plot({
+      x: {label: null, type: "band", ticks: "week" },
+      y: {tickFormat: "s", tickSpacing: 50},
+      color: {scheme: "PuOr", legend: "ramp", width: 2000, label: "Codes"},
+      marks: [
+        Plot.rectY(tidy, {
+          x: "day",
+          y: "rate",
+          fill: "code",
+          offset: "normalize",
+          sort: {color: null, x: "-y" },
+          interval: 'day'
+        })
+      ]
+    })}
+  </div>
+</div>
+
 
 <div class="divider"></div>
 
