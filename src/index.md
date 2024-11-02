@@ -101,22 +101,19 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   combine(rates, 'GRAPHSYNC_TIMEOUT', [
     'LASSIE_504'
   ])
-  combine(rates, 'GRAPHSYNC_ERROR', [
+  combine(rates, 'GRAPHSYNC_ERR', [
     /^LASSIE_(?!504)/
   ])
   combine(rates, 'IPNI_NO_ADVERTISEMENT', [
     'IPNI_ERROR_404',
     'IPNI_NO_VALID_ADVERTISEMENT',
   ])
-  combine(rates, 'IPNI_ERROR', [
+  combine(rates, 'IPNI_ERR', [
     /^IPNI_ERROR_/
   ])
-  combine(rates, 'CAR_ERROR', [
-    'CANNOT_PARSE_CAR_FILE',
-    'CAR_TOO_LARGE'
-  ])
   combine(rates, 'OTHER', [
-    'CAR_ERROR',
+    'CANNOT_PARSE_CAR_FILE',
+    'CAR_TOO_LARGE',
     'UNKNOWN_FETCH_ERROR',
     'HOSTNAME_DNS_ERROR',
     'CONNECTION_REFUSED',
