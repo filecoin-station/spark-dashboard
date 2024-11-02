@@ -66,31 +66,27 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 <body>This section shows the Spark Retrieval Result Codes breakdown.</body>
 
 ```js
-const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
-  for (const [key, value] of Object.entries(rates)) {
-    rates[key] = Number(value)
-  }
-
-  combine(rates, 'HTTP 5xx', [
+const mapping = {
+  'HTTP 5xx': [
     /^HTTP_5/,
     /^ERROR_5/,
     'BAD_GATEWAY',
     'GATEWAY_TIMEOUT'
-  ])
-  combine(rates, 'Graphsync timeout', [
+  ],
+  'Graphsync timeout': [
     'LASSIE_504'
-  ])
-  combine(rates, 'Graphsync error', [
+  ],
+  'Graphsync error': [
     /^LASSIE_(?!504)/
-  ])
-  combine(rates, 'IPNI no advertisement', [
+  ],
+  'IPNI no advertisement': [
     'IPNI_ERROR_404',
     'IPNI_NO_VALID_ADVERTISEMENT',
-  ])
-  combine(rates, 'IPNI error', [
+  ],
+  'IPNI error': [
     /^IPNI_ERROR_/
-  ])
-  combine(rates, 'Other', [
+  ],
+  'Other': [
     'CANNOT_PARSE_CAR_FILE',
     'CAR_TOO_LARGE',
     'UNKNOWN_FETCH_ERROR',
@@ -99,8 +95,18 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     'UNSUPPORTED_MULTIADDR_FORMAT',
     /^ERROR_4/,
     'TIMEOUT'
-  ])
+  ]
+}
+```
 
+```js
+const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
+  for (const [key, value] of Object.entries(rates)) {
+    rates[key] = Number(value)
+  }
+  for (const [label, codes] of Object.entries(mapping)) {
+    combine(rates, label, codes)
+  }
   const sorted = {}
   move(rates, sorted ,'OK')
   move(rates, sorted, 'HTTP 5xx')
