@@ -119,15 +119,13 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     'CONNECTION_REFUSED',
     'UNSUPPORTED_MULTIADDR_FORMAT',
     /^ERROR_4/,
+    'TIMEOUT'
   ])
 
   const sorted = {}
 
   sorted.OK = rates.OK
   delete rates.OK
-
-  sorted.TIMEOUT = rates.TIMEOUT
-  delete rates.TIMEOUT
 
   sorted['HTTP_5xx'] = rates['HTTP_5xx']
   delete rates['HTTP_5xx']
