@@ -82,6 +82,9 @@ const combine = (obj, target, keys) => {
   obj[target] = matches.reduce((acc, key) => {
     return acc + (clone[key] || 0)
   }, 0)
+  if (obj[target] === 0) {
+    delete obj[target]
+  }
 }
 const clone = obj => JSON.parse(JSON.stringify(obj))
 const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
@@ -95,9 +98,11 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     'BAD_GATEWAY',
     'GATEWAY_TIMEOUT'
   ])
-  combine(rates, 'TIMEOUT', [
-    'TIMEOUT',
-    'LASSIE_502'
+  combine(rates, 'GRAPHSYNC_TIMEOUT', [
+    'LASSIE_504'
+  ])
+  combine(rates, 'GRAPHSYNC_ERROR', [
+    /^LASSIE_(?!504)/
   ])
   combine(rates, 'IPNI_NO_ADVERTISEMENT', [
     'IPNI_ERROR_404',
