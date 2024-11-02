@@ -66,11 +66,22 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 
 ```js
 const combine = (obj, target, keys) => {
+  const matches = Object
+    .keys(obj)
+    .filter(key => {
+      return keys.find(query => {
+        return typeof query === 'string'
+          ? key === query
+          : query.test(key)
+      })
+    })
   const clone = { ...obj }
-  for (const key of keys) {
+  for (const key of matches) {
     delete obj[key]
   }
-  obj[target] = keys.reduce((acc, key) => acc + (clone[key] || 0), 0)
+  obj[target] = matches.reduce((acc, key) => {
+    return acc + (clone[key] || 0)
+  }, 0)
 }
 const clone = obj => JSON.parse(JSON.stringify(obj))
 const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
@@ -79,12 +90,8 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   }
 
   combine(rates, 'HTTP_5xx', [
-    'HTTP_500',
-    'HTTP_502',
-    'ERROR_503',
-    'ERROR_522',
-    'ERROR_520',
-    'ERROR_500',
+    /^HTTP_5/,
+    /^ERROR_5/,
     'BAD_GATEWAY',
     'GATEWAY_TIMEOUT'
   ])
@@ -97,12 +104,7 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     'IPNI_NO_VALID_ADVERTISEMENT',
   ])
   combine(rates, 'IPNI_ERROR', [
-    'IPNI_ERROR_400',
-    'IPNI_ERROR_500',
-    'IPNI_ERROR_502',
-    'IPNI_ERROR_503',
-    'IPNI_ERROR_504',
-    'IPNI_ERROR_FETCH'
+    /^IPNI_ERROR_/
   ])
   combine(rates, 'CAR_ERROR', [
     'CANNOT_PARSE_CAR_FILE',
@@ -114,10 +116,7 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     'HOSTNAME_DNS_ERROR',
     'CONNECTION_REFUSED',
     'UNSUPPORTED_MULTIADDR_FORMAT',
-    'ERROR_429',
-    'ERROR_404',
-    'ERROR_403',
-    'ERROR_408'
+    /^ERROR_4/,
   ])
 
   return Object.entries(rates).map(([code, rate]) => ({ day: new Date(day), code, rate }))
