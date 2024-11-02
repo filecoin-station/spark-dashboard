@@ -88,21 +88,12 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     'BAD_GATEWAY',
     'GATEWAY_TIMEOUT'
   ])
-  combine(rates, 'HTTP_4xx', [
-    'ERROR_429',
-    'ERROR_404',
-    'ERROR_403',
-    'ERROR_408'
-  ])
   combine(rates, 'IPNI_NOT_ADVERTISED', [
     'IPNI_ERROR_404',
     'IPNI_NO_VALID_ADVERTISEMENT',
   ])
-  combine(rates, 'IPNI_4xx', [
+  combine(rates, 'IPNI_ERROR', [
     'IPNI_ERROR_400',
-    'UNSUPPORTED_MULTIADDR_FORMAT'
-  ])
-  combine(rates, 'IPNI_5xx', [
     'IPNI_ERROR_500',
     'IPNI_ERROR_502',
     'IPNI_ERROR_503',
@@ -112,6 +103,17 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   combine(rates, 'CAR_ERROR', [
     'CANNOT_PARSE_CAR_FILE',
     'CAR_TOO_LARGE'
+  ])
+  combine(rates, 'OTHER', [
+    'CAR_ERROR',
+    'UNKNOWN_FETCH_ERROR',
+    'HOSTNAME_DNS_ERROR',
+    'CONNECTION_REFUSED',
+    'UNSUPPORTED_MULTIADDR_FORMAT',
+    'ERROR_429',
+    'ERROR_404',
+    'ERROR_403',
+    'ERROR_408'
   ])
 
   return Object.entries(rates).map(([code, rate]) => ({ day: new Date(day), code, rate }))
