@@ -92,26 +92,26 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     rates[key] = Number(value)
   }
 
-  combine(rates, 'HTTP_5xx', [
+  combine(rates, 'HTTP 5xx', [
     /^HTTP_5/,
     /^ERROR_5/,
     'BAD_GATEWAY',
     'GATEWAY_TIMEOUT'
   ])
-  combine(rates, 'GRAPHSYNC_TIMEOUT', [
+  combine(rates, 'Graphsync timeout', [
     'LASSIE_504'
   ])
-  combine(rates, 'GRAPHSYNC_ERR', [
+  combine(rates, 'Graphsync error', [
     /^LASSIE_(?!504)/
   ])
-  combine(rates, 'IPNI_NO_ADVERTISEMENT', [
+  combine(rates, 'IPNI no advertisement', [
     'IPNI_ERROR_404',
     'IPNI_NO_VALID_ADVERTISEMENT',
   ])
-  combine(rates, 'IPNI_ERR', [
+  combine(rates, 'IPNI error', [
     /^IPNI_ERROR_/
   ])
-  combine(rates, 'OTHER', [
+  combine(rates, 'Other', [
     'CANNOT_PARSE_CAR_FILE',
     'CAR_TOO_LARGE',
     'UNKNOWN_FETCH_ERROR',
@@ -127,27 +127,27 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   sorted.OK = rates.OK
   delete rates.OK
 
-  sorted['HTTP_5xx'] = rates['HTTP_5xx']
-  delete rates['HTTP_5xx']
+  sorted['HTTP 5xx'] = rates['HTTP 5xx']
+  delete rates['HTTP 5xx']
 
-  sorted.GRAPHSYNC_ERR = rates.GRAPHSYNC_ERR
-  delete rates.GRAPHSYNC_ERR
+  sorted['Graphsync error'] = rates['Graphsync error']
+  delete rates['Graphsync error']
 
-  sorted.IPNI_ERR = rates.IPNI_ERR
-  delete rates.IPNI_ERR
+  sorted['IPNI error'] = rates['IPNI error']
+  delete rates['IPNI error']
 
-  sorted.IPNI_NO_ADVERTISEMENT = rates.IPNI_NO_ADVERTISEMENT
-  delete rates.IPNI_NO_ADVERTISEMENT
+  sorted['IPNI no advertisement'] = rates['IPNI no advertisement']
+  delete rates['IPNI no advertisement']
 
   for (const [key, value] of Object.entries(rates)) {
-    if (key !== 'OTHER') {
+    if (key !== 'Other') {
       sorted[key] = value
       delete rates[key]
     }
   }
 
-  sorted.OTHER = rates.OTHER
-  delete rates.OTHER
+  sorted['Other'] = rates['Other']
+  delete rates['Other']
 
   return Object.entries(sorted).map(([code, rate]) => ({ day: new Date(day), code, rate }))
 })
