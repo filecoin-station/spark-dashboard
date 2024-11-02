@@ -153,7 +153,7 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
 })
 ```
 
-<div class="grid grid-cols-1" style="grid-auto-rows: 500px;">
+<div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
   <div class="card">
     ${Plot.plot({
       x: {label: null, type: "band", ticks: "week" },
