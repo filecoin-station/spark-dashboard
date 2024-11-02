@@ -66,10 +66,11 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 
 ```js
 const combine = (obj, target, keys) => {
-  obj[target] = keys.reduce((acc, key) => acc + (obj[key] || 0), 0)
+  const clone = { ...obj }
   for (const key of keys) {
     delete obj[key]
   }
+  obj[target] = keys.reduce((acc, key) => acc + (clone[key] || 0), 0)
 }
 const clone = obj => JSON.parse(JSON.stringify(obj))
 const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
@@ -78,7 +79,6 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   }
 
   combine(rates, 'HTTP_5xx', [
-    'LASSIE_502',
     'HTTP_500',
     'HTTP_502',
     'ERROR_503',
@@ -87,6 +87,10 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     'ERROR_500',
     'BAD_GATEWAY',
     'GATEWAY_TIMEOUT'
+  ])
+  combine(rates, 'TIMEOUT', [
+    'TIMEOUT',
+    'LASSIE_502'
   ])
   combine(rates, 'IPNI_NO_ADVERTISEMENT', [
     'IPNI_ERROR_404',
