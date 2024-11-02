@@ -62,7 +62,7 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 <div class="divider"></div>
 
 <h4>Spark Retrieval Result Codes</h4>
-<body>This section shows the Spark Retrieval Result Codes breakdown. You can adjust the date range. Records exist for the last 90 days.</body>
+<body>This section shows the Spark Retrieval Result Codes breakdown.</body>
 
 ```js
 const combine = (obj, target, keys) => {
