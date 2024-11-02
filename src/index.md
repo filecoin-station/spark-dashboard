@@ -6,6 +6,7 @@ toc: false
 import { LineGraph } from "./components/line-graph.js";
 import { Histogram } from "./components/histogram.js";
 import { todayInFormat, getDateXDaysAgo } from "./utils/date-utils.js";
+import { combine, move, clone } from "./utils/ratios-utils.js";
 const SparkRates = FileAttachment("./data/spark-rsr.json").json();
 const SparkNonZeroRates = FileAttachment("./data/spark-rsr-non-zero.json").json();
 const SparkMinerRates = FileAttachment("./data/spark-miners-rsr.json").json();
@@ -65,32 +66,6 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 <body>This section shows the Spark Retrieval Result Codes breakdown.</body>
 
 ```js
-const combine = (obj, target, keys) => {
-  const matches = Object
-    .keys(obj)
-    .filter(key => {
-      return keys.find(query => {
-        return typeof query === 'string'
-          ? key === query
-          : query.test(key)
-      })
-    })
-  const clone = { ...obj }
-  for (const key of matches) {
-    delete obj[key]
-  }
-  obj[target] = matches.reduce((acc, key) => {
-    return acc + (clone[key] || 0)
-  }, 0)
-  if (obj[target] === 0) {
-    delete obj[target]
-  }
-}
-const clone = obj => JSON.parse(JSON.stringify(obj))
-const move = (from, to, key) => {
-  to[key] = from[key]
-  delete from[key]
-}
 const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   for (const [key, value] of Object.entries(rates)) {
     rates[key] = Number(value)
