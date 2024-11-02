@@ -17,7 +17,7 @@ const sortedSparkMinerRates = SparkMinerRates.sort((recordA, recordB) => recordB
 ```
 
 <div class="hero">
-  <body><img src="media/spark-logomark-white-with-bbox.png" alt="Spark Logo" width="300" /><body>
+  <body><img src="media/spark-logomark-blue-with-bbox.png" alt="Spark Logo" width="300" /><body>
     <h2>Dashboard Beta</h2>
     <body><a href="https://filspark.com/dashboard" target="_blank" rel="noopener noreferrer">(Click here for Legacy Spark Grafana Dashboard)</a><body>
 </div>
