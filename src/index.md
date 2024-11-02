@@ -160,7 +160,7 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     ${Plot.plot({
       x: {label: null, type: "band", ticks: "week" },
       y: {tickFormat: "s", tickSpacing: 50},
-      color: {scheme: "PuOr", legend: "ramp", width: 2000, label: "Codes"},
+      color: {scheme: "Accent", legend: "ramp", width: 2000, label: "Codes"},
       marks: [
         Plot.rectY(tidy, {
           x: "day",
