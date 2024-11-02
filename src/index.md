@@ -87,6 +87,10 @@ const combine = (obj, target, keys) => {
   }
 }
 const clone = obj => JSON.parse(JSON.stringify(obj))
+const move = (from, to, key) => {
+  to[key] = from[key]
+  delete from[key]
+}
 const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   for (const [key, value] of Object.entries(rates)) {
     rates[key] = Number(value)
@@ -123,31 +127,17 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   ])
 
   const sorted = {}
-
-  sorted.OK = rates.OK
-  delete rates.OK
-
-  sorted['HTTP 5xx'] = rates['HTTP 5xx']
-  delete rates['HTTP 5xx']
-
-  sorted['Graphsync error'] = rates['Graphsync error']
-  delete rates['Graphsync error']
-
-  sorted['IPNI error'] = rates['IPNI error']
-  delete rates['IPNI error']
-
-  sorted['IPNI no advertisement'] = rates['IPNI no advertisement']
-  delete rates['IPNI no advertisement']
-
+  move(rates, sorted ,'OK')
+  move(rates, sorted, 'HTTP 5xx')
+  move(rates, sorted, 'Graphsync error')
+  move(rates, sorted, 'IPNI error')
+  move(rates, sorted, 'IPNI no advertisement')
   for (const [key, value] of Object.entries(rates)) {
     if (key !== 'Other') {
-      sorted[key] = value
-      delete rates[key]
+      move(rates, sorted, key)
     }
   }
-
-  sorted['Other'] = rates['Other']
-  delete rates['Other']
+  move(rates, sorted, 'Other')
 
   return Object.entries(sorted).map(([code, rate]) => ({ day: new Date(day), code, rate }))
 })
