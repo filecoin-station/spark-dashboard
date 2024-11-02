@@ -88,7 +88,7 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     'BAD_GATEWAY',
     'GATEWAY_TIMEOUT'
   ])
-  combine(rates, 'IPNI_NOT_ADVERTISED', [
+  combine(rates, 'IPNI_NO_ADVERTISEMENT', [
     'IPNI_ERROR_404',
     'IPNI_NO_VALID_ADVERTISEMENT',
   ])
