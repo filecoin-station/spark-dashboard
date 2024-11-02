@@ -121,7 +121,37 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     /^ERROR_4/,
   ])
 
-  return Object.entries(rates).map(([code, rate]) => ({ day: new Date(day), code, rate }))
+  const sorted = {}
+
+  sorted.OK = rates.OK
+  delete rates.OK
+
+  sorted.TIMEOUT = rates.TIMEOUT
+  delete rates.TIMEOUT
+
+  sorted['HTTP_5xx'] = rates['HTTP_5xx']
+  delete rates['HTTP_5xx']
+
+  sorted.IPNI_NO_ADVERTISEMENT = rates.IPNI_NO_ADVERTISEMENT
+  delete rates.IPNI_NO_ADVERTISEMENT
+
+  sorted.IPNI_ERR = rates.IPNI_ERR
+  delete rates.IPNI_ERR
+
+  sorted.GRAPHSYNC_ERR = rates.GRAPHSYNC_ERR
+  delete rates.GRAPHSYNC_ERR
+
+  for (const [key, value] of Object.entries(rates)) {
+    if (key !== 'OTHER') {
+      sorted[key] = value
+      delete rates[key]
+    }
+  }
+
+  sorted.OTHER = rates.OTHER
+  delete rates.OTHER
+
+  return Object.entries(sorted).map(([code, rate]) => ({ day: new Date(day), code, rate }))
 })
 ```
 
