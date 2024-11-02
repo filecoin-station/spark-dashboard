@@ -151,6 +151,21 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   </div>
 </div>
 
+<details>
+<summary>Result code to label mapping</summary>
+<pre>
+${JSON.stringify(
+  mapping,
+  (key, value) => {
+    return value instanceof RegExp
+      ? value.toString()
+      : value
+  },
+  2
+)}
+</pre>
+</details>
+
 
 <div class="divider"></div>
 
