@@ -130,14 +130,14 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   sorted['HTTP_5xx'] = rates['HTTP_5xx']
   delete rates['HTTP_5xx']
 
-  sorted.IPNI_NO_ADVERTISEMENT = rates.IPNI_NO_ADVERTISEMENT
-  delete rates.IPNI_NO_ADVERTISEMENT
+  sorted.GRAPHSYNC_ERR = rates.GRAPHSYNC_ERR
+  delete rates.GRAPHSYNC_ERR
 
   sorted.IPNI_ERR = rates.IPNI_ERR
   delete rates.IPNI_ERR
 
-  sorted.GRAPHSYNC_ERR = rates.GRAPHSYNC_ERR
-  delete rates.GRAPHSYNC_ERR
+  sorted.IPNI_NO_ADVERTISEMENT = rates.IPNI_NO_ADVERTISEMENT
+  delete rates.IPNI_NO_ADVERTISEMENT
 
   for (const [key, value] of Object.entries(rates)) {
     if (key !== 'OTHER') {
