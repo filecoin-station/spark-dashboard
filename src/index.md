@@ -6,9 +6,11 @@ toc: false
 import { LineGraph } from "./components/line-graph.js";
 import { Histogram } from "./components/histogram.js";
 import { todayInFormat, getDateXDaysAgo } from "./utils/date-utils.js";
+import { combine, move, clone } from "./utils/ratios-utils.js";
 const SparkRates = FileAttachment("./data/spark-rsr.json").json();
 const SparkNonZeroRates = FileAttachment("./data/spark-rsr-non-zero.json").json();
 const SparkMinerRates = FileAttachment("./data/spark-miners-rsr.json").json();
+const SparkRetrievalResultCodes = FileAttachment("./data/spark-retrieval-result-codes.json").json();
 ```
 
 ```js
@@ -57,6 +59,113 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
     resize((width) => Histogram(nonZeroSparkMinerRates, { width, title: "Non-zero Miners: Retrieval Success Rate Buckets", thresholds: 10 }))
   }</div>
 </div>
+
+<div class="divider"></div>
+
+<h4>Spark Retrieval Result Codes</h4>
+<body>This section shows the Spark Retrieval Result Codes breakdown.</body>
+
+```js
+const mapping = {
+  'HTTP 5xx': [
+    /^HTTP_5/,
+    /^ERROR_5/,
+    'BAD_GATEWAY',
+    'GATEWAY_TIMEOUT'
+  ],
+  'Graphsync timeout': [
+    'LASSIE_504'
+  ],
+  'Graphsync error': [
+    /^LASSIE_(?!504)/
+  ],
+  'IPNI no advertisement': [
+    'IPNI_ERROR_404',
+    'IPNI_NO_VALID_ADVERTISEMENT',
+  ],
+  'IPNI error': [
+    /^IPNI_ERROR_/
+  ],
+  'Other': [
+    'CANNOT_PARSE_CAR_FILE',
+    'CAR_TOO_LARGE',
+    'UNKNOWN_FETCH_ERROR',
+    'HOSTNAME_DNS_ERROR',
+    'CONNECTION_REFUSED',
+    'UNSUPPORTED_MULTIADDR_FORMAT',
+    /^ERROR_4/,
+    'TIMEOUT'
+  ]
+}
+```
+
+```js
+const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
+  for (const [key, value] of Object.entries(rates)) {
+    rates[key] = Number(value)
+  }
+  for (const [label, codes] of Object.entries(mapping)) {
+    combine(rates, label, codes)
+  }
+  const sorted = {}
+  move(rates, sorted ,'OK')
+  move(rates, sorted, 'HTTP 5xx')
+  move(rates, sorted, 'Graphsync error')
+  move(rates, sorted, 'IPNI error')
+  move(rates, sorted, 'IPNI no advertisement')
+  for (const [key, value] of Object.entries(rates)) {
+    if (key !== 'Other') {
+      move(rates, sorted, key)
+    }
+  }
+  move(rates, sorted, 'Other')
+
+  return Object.entries(sorted).map(([code, rate]) => ({ day: new Date(day), code, rate }))
+})
+```
+
+<div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
+  <div class="card">
+    ${Plot.plot({
+      x: {label: null, type: "band", ticks: "week" },
+      y: {
+        percent: true
+      },
+      color: {
+        scheme: "Accent",
+        legend: "swatches",
+        width: 2000,
+        label: "Codes"
+      },
+      marks: [
+        Plot.rectY(tidy, {
+          x: "day",
+          y: "rate",
+          fill: "code",
+          offset: "normalize",
+          sort: {color: null, x: "-y" },
+          interval: 'day'
+        })
+      ]
+    })}
+  </div>
+</div>
+
+<details>
+<summary>Result code to label mapping</summary>
+<pre>
+${JSON.stringify(
+  mapping,
+  (key, value) => {
+    return value instanceof RegExp
+      ? value.toString()
+      : value
+  },
+  2
+)}
+</pre>
+</details>
+
 
 <div class="divider"></div>
 
