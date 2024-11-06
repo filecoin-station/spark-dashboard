@@ -11,6 +11,7 @@ const SparkRates = FileAttachment("./data/spark-rsr.json").json();
 const SparkNonZeroRates = FileAttachment("./data/spark-rsr-non-zero.json").json();
 const SparkMinerRates = FileAttachment("./data/spark-miners-rsr.json").json();
 const SparkRetrievalResultCodes = FileAttachment("./data/spark-retrieval-result-codes.json").json();
+const SparkMinerRsrSummaries = FileAttachment("./data/spark-miner-rsr-summaries.json").json();
 ```
 
 ```js
@@ -58,6 +59,51 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
   <div class="card">${
     resize((width) => Histogram(nonZeroSparkMinerRates, { width, title: "Non-zero Miners: Retrieval Success Rate Buckets", thresholds: 10 }))
   }</div>
+</div>
+
+<div class="divider"></div>
+
+<h4>Spark Miner RSR buckets over time</h4>
+<body></body>
+
+```js
+const countAbove = (a, t) => a.filter(v => v > t).length
+const percentiles = Object.entries(SparkMinerRsrSummaries)
+  .flatMap(([day, miners]) => [
+    0.8,
+    0.9,
+    0.95,
+    0.99,
+    0.995,
+    0.999
+  ].map(above => ({
+    day: new Date(day),
+    label: `> ${above * 100}%`,
+    count: countAbove(miners.map(m => m.success_rate), above)
+  })))
+```
+
+<div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
+  <div class="card">
+    ${Plot.plot({
+      title: '# of Filecoin SPs with Spark Retrieval Success Rate above x%',
+      x: { label: null },
+      y: { grid: true, label: null },
+      color: {
+        scheme: "Paired",
+        legend: "swatches"
+      },
+      marks: [
+        Plot.ruleY([0]),
+        Plot.line(percentiles, {
+          x: 'day',
+          y: 'count',
+          stroke: 'label',
+          curve: 'catmull-rom'
+        })
+      ]
+    })}
+  </div>
 </div>
 
 <div class="divider"></div>
