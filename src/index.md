@@ -18,7 +18,7 @@ const SparkMinerRsrSummaries = FileAttachment("./data/spark-miner-rsr-summaries.
 const nonZeroSparkMinerRates = SparkMinerRates.filter((record) => record.success_rate != 0)
 const tidySparkMinerRates = SparkMinerRates
   .sort((recordA, recordB) => recordB.success_rate - recordA.success_rate)
-  .map(record => ({ ...record, success_rate: `${(record.success_rate * 100).toFixed(11)}%`}))
+  .map(record => ({ ...record, success_rate: `${(record.success_rate * 100).toFixed(2)}%`}))
 ```
 
 <div class="hero">
