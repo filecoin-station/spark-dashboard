@@ -70,6 +70,7 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 const countAbove = (a, t) => a.filter(v => v > t).length
 const percentiles = Object.entries(SparkMinerRsrSummaries)
   .flatMap(([day, miners]) => [
+    0.8,
     0.9,
     0.95,
     0.99,
