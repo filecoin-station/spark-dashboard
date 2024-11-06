@@ -16,7 +16,9 @@ const SparkMinerRsrSummaries = FileAttachment("./data/spark-miner-rsr-summaries.
 
 ```js
 const nonZeroSparkMinerRates = SparkMinerRates.filter((record) => record.success_rate != 0)
-const sortedSparkMinerRates = SparkMinerRates.sort((recordA, recordB) => recordB.success_rate - recordA.success_rate)
+const tidySparkMinerRates = SparkMinerRates
+  .sort((recordA, recordB) => recordB.success_rate - recordA.success_rate)
+  .map(record => ({ ...record, success_rate: `${(record.success_rate * 100).toFixed(11)}%`}))
 ```
 
 <div class="hero">
@@ -219,7 +221,7 @@ ${JSON.stringify(
 <body>The following table shows the Spark RSR values calculated in aggregate for each Filecoin Storage Provider over the past 30 days.</body>
 
 ```js
-const search = view(Inputs.search(sortedSparkMinerRates, {placeholder: "Search Storage Providers…"}));
+const search = view(Inputs.search(tidySparkMinerRates, {placeholder: "Search Storage Providers…"}));
 ```
 
 <div class="card" style="padding: 0;">
