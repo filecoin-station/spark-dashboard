@@ -12,7 +12,7 @@ export function LineGraph(events, {width, height, title, start, end} = {}) {
         width,
         height,
         x: {type: "utc", ticks: "month", label: null},
-        y: {grid: true, inset: 10, label: "RSR"},
+        y: {grid: true, inset: 10, label: "RSR (%)", percent: true},
         marks: [
             Plot.lineY(filteredEvents, {
                 x: "day",
