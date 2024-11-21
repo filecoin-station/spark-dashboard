@@ -70,6 +70,10 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 
 ```js
 const countAbove = (a, t) => a.filter(v => v > t).length
+const nonZeroMinersOverTime = Object.entries(SparkMinerRsrSummaries).map(([day, miners]) => ({
+    day: new Date(day),
+    count: countAbove(miners.map(m => m.success_rate), 0)
+}))
 const percentiles = Object.entries(SparkMinerRsrSummaries)
   .flatMap(([day, miners]) => [
     0.8,
@@ -86,6 +90,22 @@ const percentiles = Object.entries(SparkMinerRsrSummaries)
 ```
 
 <div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
+  <div class="card">
+      ${Plot.plot({
+      title: '# of Filecoin SPs with a non-zero Spark Retrieval Success Rate',
+      x: { label: null },
+      y: { grid: true, label: null },
+      marks: [
+        Plot.ruleY([0]),
+        Plot.line(nonZeroMinersOverTime, {
+          x: 'day',
+          y: 'count',
+          stroke: "#FFBD3F",
+          curve: 'catmull-rom'
+        })
+      ]
+    })}
+  </div>
   <div class="card">
     ${Plot.plot({
       title: '# of Filecoin SPs with Spark Retrieval Success Rate above x%',
