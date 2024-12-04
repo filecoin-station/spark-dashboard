@@ -5,7 +5,7 @@ const start = '2024-04-07';
 const end = getDateXDaysAgo(1);
 
 const result = await jsonFetcher(`https://stats.filspark.com/miners/retrieval-success-rate/summary?from=${start}&to=${end}`)
-const minerPaths = result.map(miner => `/miner/${miner.miner_id}`);
+const minerPaths = result.map(miner => `/provider/${miner.miner_id}`);
 
 // See https://observablehq.com/framework/config for documentation.
 export default {
