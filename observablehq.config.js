@@ -5,7 +5,7 @@ const start = '2024-04-07';
 const end = getDateXDaysAgo(1);
 
 const result = await jsonFetcher(`https://stats.filspark.com/miners/retrieval-success-rate/summary?from=${start}&to=${end}`)
-const minerPaths = result.map(miner => `/provider/${miner.miner_id}`);
+const providerPaths = result.map(provider => `/provider/${provider.miner_id}`);
 
 // See https://observablehq.com/framework/config for documentation.
 export default {
@@ -43,5 +43,5 @@ export default {
   // linkify: true, // convert URLs in Markdown to links
   // typographer: false, // smart quotes and other typographic improvements
   // cleanUrls: true, // drop .html from URLs
-  dynamicPaths: minerPaths,
+  dynamicPaths: providerPaths,
 };
