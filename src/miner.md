@@ -18,20 +18,34 @@ import { todayInFormat, getDateXDaysAgo } from "./utils/date-utils.js";
 <body>This section shows the miner Spark Retrieval Success Rate Score summary. You can adjust the date range. Records start on the 7th April 2024.</body>
 
 ```js
-const minerID = view(Inputs.text({label: "Enter Miner ID", placeholder: "Type a miner ID...", value: "f03084393", submit: true }));
+const minerID = view(Inputs.text({label: "Enter Miner ID", placeholder: "Type a miner ID...", value: "", submit: true }));
 const start = view(Inputs.date({label: "Start", value: getDateXDaysAgo(180) }));
 const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 ```
 
 ```js
+const isValidMinerId = (minerId) => {
+  // Regular expression to match valid Filecoin miner IDs
+  const minerIdRegex = /^(f|t)0\d+$/;
+  return minerIdRegex.test(minerId);
+}
+
+const formatDateField = (dateField) => {
+  return new Date(dateField).toISOString().split('T')[0];
+}
+
 // Reactive data loader for the input
-let getDataForMiner = async () => {
+const getDataForMiner = async () => {
   if (!minerID || !start || !end) return;
 
-  const startDate = new Date(start).toISOString().split('T')[0];
-  const endDate = new Date(end).toISOString().split('T')[0];
+  const formattedMinerID = minerID.trim().toLowerCase();
+  if (!isValidMinerId(formattedMinerID)) throw `Invalid Miner ID ${minerID}`;
+  
+  const startDate = formatDateField(start);
+  const endDate = formatDateField(end);
+
   try {
-    const response = await fetch(`https://stats.filspark.com/miner/${minerID}/retrieval-success-rate/summary?from=${startDate}&to=${endDate}`);
+    const response = await fetch(`https://stats.filspark.com/miner/${formattedMinerID}/retrieval-success-rate/summary?from=${startDate}&to=${endDate}`);
     
     if (!response.ok) throw new Error(`Miner ID ${minerID} not found.`);
     
@@ -39,9 +53,9 @@ let getDataForMiner = async () => {
     return await response.json();
   } catch (error) {
     // Handle and display errors
-    throw `Error: ${error.message}`;
+    throw new Error(`Error: ${error.message}`);
   }
-}
+};
 
 const data = await getDataForMiner();
 ```
