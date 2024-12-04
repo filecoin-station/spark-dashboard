@@ -245,7 +245,7 @@ const search = view(Inputs.search(tidySparkMinerRates, {placeholder: "Search Sto
 ```
 
 <div class="card" style="padding: 0;">
-  ${Inputs.table(search, {rows: 16})}
+  ${Inputs.table(search, {rows: 16, format: {miner_id: id => htl.html`<a href=./miner/${id} target=_blank>${id}</a>`}})}
 </div>
 
 <style>
