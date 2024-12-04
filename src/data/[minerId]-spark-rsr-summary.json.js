@@ -11,9 +11,9 @@ const {
 const start = '2024-04-07';
 const end = getDateXDaysAgo(1);
 
-const summaries = await jsonFetcher(
+const summary = await jsonFetcher(
   `https://stats.filspark.com/miner/${minerId}/retrieval-success-rate/summary?from=${start}&to=${end}`
 );
 
 
-process.stdout.write(JSON.stringify(summaries));
+process.stdout.write(JSON.stringify(summary));
