@@ -10,8 +10,8 @@ const data = FileAttachment(`../data/${observable.params.minerId}-spark-rsr-summ
     <body><a href="https://filspark.com/dashboard" target="_blank" rel="noopener noreferrer">(Click here for Legacy Spark Grafana Dashboard)</a><body>
 </div>
 
-<h4>Miner Spark RSR Summary</h4>
-<body>This section shows the miner Spark Retrieval Success Rate Score summary. You can adjust the date range. Records start on the 7th April 2024.</body>
+<h4>Storage Provider Spark RSR Summary</h4>
+<body>This section shows the storage provider Spark Retrieval Success Rate Score summary. You can adjust the date range. Records start on the 7th April 2024.</body>
 
 
 ```js
