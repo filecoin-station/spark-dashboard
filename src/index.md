@@ -238,7 +238,7 @@ ${JSON.stringify(
 <div class="divider"></div>
 
 <h4>Spark Miner RSR Table</h4>
-<body>The following table shows the Spark RSR values calculated in aggregate for each Filecoin Storage Provider over the past 30 days.</body>
+<body>The following table shows the Spark RSR values calculated in aggregate for each Filecoin Storage Provider over the past 30 days. Click on a miner_id to view data scoped to this miner.</body>
 
 ```js
 const search = view(Inputs.search(tidySparkMinerRates, {placeholder: "Search Storage Providers…"}));
