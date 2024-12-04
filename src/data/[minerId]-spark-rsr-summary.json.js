@@ -8,7 +8,7 @@ const {
   options: {minerId: {type: "string"}}
 });
 
-const start = getDateXDaysAgo(200);
+const start = '2024-04-07';
 const end = getDateXDaysAgo(1);
 
 const summaries = await jsonFetcher(
