@@ -238,14 +238,14 @@ ${JSON.stringify(
 <div class="divider"></div>
 
 <h4>Spark Miner RSR Table</h4>
-<body>The following table shows the Spark RSR values calculated in aggregate for each Filecoin Storage Provider over the past 30 days. Click on a miner_id to view data scoped to this miner.</body>
+<body>The following table shows the Spark RSR values calculated in aggregate for each Filecoin Storage Provider over the past 30 days. Click on a miner_id to view data scoped to this storage provider.</body>
 
 ```js
 const search = view(Inputs.search(tidySparkMinerRates, {placeholder: "Search Storage Providers…"}));
 ```
 
 <div class="card" style="padding: 0;">
-  ${Inputs.table(search, {rows: 16, format: {miner_id: id => htl.html`<a href=./miner/${id} target=_blank>${id}</a>`}})}
+  ${Inputs.table(search, {rows: 16, format: {miner_id: id => htl.html`<a href=./provider/${id} target=_blank>${id}</a>`}})}
 </div>
 
 <style>

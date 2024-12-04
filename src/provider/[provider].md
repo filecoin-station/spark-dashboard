@@ -1,7 +1,12 @@
+---
+toc: false
+title: Storage Provider Summary
+---
+
 ```js
 import { LineGraph } from "../components/line-graph.js";
 import { getDateXDaysAgo } from "../utils/date-utils.js";
-const data = FileAttachment(`../data/${observable.params.minerId}-spark-rsr-summary.json`).json();
+const data = FileAttachment(`../data/${observable.params.provider}-spark-rsr-summary.json`).json();
 ```
 
 <div class="hero">
@@ -19,7 +24,7 @@ const start = view(Inputs.date({label: "Start", value: getDateXDaysAgo(180) }));
 const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 ```
 
-<h3>Stats for ${observable.params.minerId}</h3>
+<h3>Stats for ${observable.params.provider}</h3>
 
 <div class="grid grid-cols" style="grid-auto-rows: 500px;">
   <div class="card">${
