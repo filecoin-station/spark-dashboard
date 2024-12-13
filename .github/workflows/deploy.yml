@@ -33,6 +33,8 @@ jobs:
 
     - name: Build project
       run: npm run build  # Assumes your project has a build script in package.json
+      env:
+        API_TOKEN: ${{ secrets.API_TOKEN }}
 
     - name: Deploy to Cloudflare Pages
       uses: cloudflare/pages-action@v1
