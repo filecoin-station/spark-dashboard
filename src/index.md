@@ -2,6 +2,7 @@
 toc: false
 ---
 
+
 ```js
 import { LineGraph } from "./components/line-graph.js";
 import { Histogram } from "./components/histogram.js";

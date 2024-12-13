@@ -26,7 +26,7 @@ export default {
   // ],
 
   // Content to add to the head of the page, e.g. for a favicon:
-  head: '<link rel="icon" href="media/spark-with-bbox.png" type="image/png" sizes="32x32">',
+  head: '<link rel="icon" href="media/spark-with-bbox.png" type="image/png" sizes="32x32"><script defer data-domain="dashboard.filspark.com" src="https://plausible.io/js/script.js"></script>',
 
   // The path to the source root.
   root: "src",
