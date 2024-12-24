@@ -8,7 +8,7 @@ import { LineGraph } from "../components/line-graph.js";
 import { getDateXDaysAgo } from "../utils/date-utils.js";
 
 const rsrData = FileAttachment(`../data/${observable.params.provider}-spark-rsr-summary.json`).json();
-const ttfbData = FileAttachment(`../data/${observable.params.provider}-spark-ttfb-summary.json`).json();
+const ttfbData = FileAttachment(`../data/${observable.params.provider}-spark-retrieval-times-summary.json`).json();
 
 console.log(ttfbData)
 ```
@@ -43,7 +43,7 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
       marks: [
         Plot.lineY(ttfbData, {
           x: 'day',
-          y: 'p50',
+          y: 'ttfb_p50',
           stroke: "#FFBD3F",
         })
       ]
