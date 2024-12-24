@@ -13,6 +13,7 @@ const SparkNonZeroRates = FileAttachment("./data/spark-rsr-non-zero.json").json(
 const SparkMinerRates = FileAttachment("./data/spark-miners-rsr.json").json();
 const SparkRetrievalResultCodes = FileAttachment("./data/spark-retrieval-result-codes.json").json();
 const SparkMinerRsrSummaries = FileAttachment("./data/spark-miner-rsr-summaries.json").json();
+const SparkTTFB = FileAttachment("./data/spark-ttfb.json").json();
 ```
 
 ```js

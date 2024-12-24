@@ -6,8 +6,13 @@ title: Storage Provider Summary
 ```js
 import { LineGraph } from "../components/line-graph.js";
 import { getDateXDaysAgo } from "../utils/date-utils.js";
-const data = FileAttachment(`../data/${observable.params.provider}-spark-rsr-summary.json`).json();
+
+const rsrData = FileAttachment(`../data/${observable.params.provider}-spark-rsr-summary.json`).json();
+const ttfbData = FileAttachment(`../data/${observable.params.provider}-spark-ttfb-summary.json`).json();
+
+console.log(ttfbData)
 ```
+
 
 <div class="hero">
   <body><a href="/"><img src="../media/spark-logomark-blue-with-bbox.png" alt="Spark Logo" width="300" /></a><body>
@@ -26,10 +31,24 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 
 <h3>Stats for ${observable.params.provider}</h3>
 
-<div class="grid grid-cols" style="grid-auto-rows: 500px;">
+<div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
   <div class="card">${
-    resize((width) => LineGraph(data, {width, title: "Retrieval Success Rate", start, end }))
+    resize((width) => LineGraph(rsrData, {width, title: "Retrieval Success Rate", start, end }))
   }</div>
+  <div class="card">
+      ${Plot.plot({
+      title: 'Time to First Byte (TTFB)',
+      x: { type: 'utc', ticks: 'month' },
+      y: { grid: true, label: 'P50 (ms)' },
+      marks: [
+        Plot.lineY(ttfbData, {
+          x: 'day',
+          y: 'p50',
+          stroke: "#FFBD3F",
+        })
+      ]
+    })}
+  </div>
 </div>
 
 <style>
