@@ -12,6 +12,6 @@ const {
 const start = '2024-04-07';
 const end = getDateXDaysAgo(1);
 
-const summary = await pRetry(() => jsonFetcher(`http://127.0.0.1:8080/miner/${provider}/retrieval-times/summary?from=${start}&to=${end}`), { retries: 3 });
+const summary = await pRetry(() => jsonFetcher(`https://stats.filspark.com/miner/${provider}/retrieval-times/summary?from=${start}&to=${end}`), { retries: 3 });
 
 process.stdout.write(JSON.stringify(summary));

@@ -132,8 +132,17 @@ const percentiles = Object.entries(SparkMinerRsrSummaries)
 
 <div class="divider"></div>
 
-<h4>Spark Retrieval Result Codes</h4>
-<body>This section shows the Spark Retrieval Result Codes breakdown.</body>
+
+<div class="grid grid-cols-2">
+  <div>
+    <h4>Spark Retrieval Result Codes</h4>
+    <body>This section shows the Spark Retrieval Result Codes breakdown.</body>
+  </div>
+  <div>
+    <h4>Spark Miner Time To First Byte</h4>
+    <body>This section shows overall median time to first byte for whole network.</body>
+  </div>
+</div>
 
 ```js
 const mapping = {
@@ -219,6 +228,20 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
       ]
     })}
   </div>
+  <div class="card">
+      ${Plot.plot({
+      title: 'Time to First Byte (TTFB)',
+      x: { type: 'utc', ticks: 'month' },
+      y: { grid: true, label: 'P50 (ms)' },
+      marks: [
+        Plot.lineY(SparkRetrievalTimes, {
+          x: 'day',
+          y: 'ttfb_p50',
+          stroke: "#FFBD3F",
+        })
+      ]
+    })}
+  </div> 
 </div>
 
 <details>
