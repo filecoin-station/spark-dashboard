@@ -1,6 +1,10 @@
-# spark-dash
+# spark-dashboard
 
-This is an [Observable Framework](https://observablehq.com/framework) app. To start the local preview server, run:
+This is an [Observable Framework](https://observablehq.com/framework) app running at https://dashboard.filspark.com.
+
+## Development
+
+ To start the local preview server, run:
 
 ```
 npm run dev
