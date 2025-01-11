@@ -4,7 +4,7 @@ import * as d3 from 'd3'
 export function Histogram (events, { width, title, thresholds }) {
   const data = events.flatMap(d => [
     { type: 'Successful Http', value: d.success_rate * 100 },
-    { type: 'Successful', value: d.success_rate * 100 }
+    { type: 'Successful', value: d.success_rate_http * 100 }
   ])
 
   const binnedData = Array.from(new Set(data.map(item => item.type))).flatMap(type => {
