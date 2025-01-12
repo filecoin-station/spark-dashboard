@@ -2,9 +2,6 @@ import * as Plot from 'npm:@observablehq/plot'
 import * as d3 from 'd3'
 
 export function Histogram (events, { width, title, thresholds }) {
-    console.log(
-        `events: ${JSON.stringify(events)}, width: ${width}, title: ${title}, thresholds: ${thresholds}`
-    )
   const data = events.flatMap(d => {
     let res = Array.from([ { type: 'Successful', value: d.success_rate * 100 }]);
     if (typeof d.success_rate_http != null && d.success_rate_http != undefined) {

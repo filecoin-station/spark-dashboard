@@ -16,10 +16,7 @@ const SparkMinerRsrSummaries = FileAttachment("./data/spark-miner-rsr-summaries.
 ```
 
 ```js
-const nonZeroSparkMinerRatesAny = SparkMinerRates.filter((record) => record.success_rate != 0)
-const nonZeroSparkMinerRatesHttp = SparkMinerRates.filter((record) => record.success_rate_http != 0)
-const nonZeroSparkMinerRates = Array.from(new Set([...nonZeroSparkMinerRatesAny,...nonZeroSparkMinerRatesHttp ]
-.map(a => JSON.stringify(a)))).map(e => JSON.parse(e));
+const nonZeroSparkMinerRates = SparkMinerRates.filter((record) => record.success_rate != 0)
 const tidySparkMinerRates = SparkMinerRates
   .sort((recordA, recordB) => recordB.success_rate - recordA.success_rate)
   .map(record => ({ ...record, success_rate: `${(record.success_rate * 100).toFixed(2)}%`}))
@@ -63,7 +60,7 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
     resize((width) => Histogram(SparkMinerRates, { width, title: "Retrieval Success Rate Buckets", thresholds: 10 }))
   }</div>
   <div class="card">${
-    resize((width) => Histogram(nonZeroSparkMinerRates, { width, title: "Non-zero Miners: Retrieval Success Rate Buckets", thresholds: 10 }))
+    resize((width) => Histogram(nonZeroSparkMinerRates.map((record) => ({success_rate: record.success_rate, success_rate_http: record.success_rate_http? record.success_rate_http: null})), { width, title: "Non-zero Miners: Retrieval Success Rate Buckets", thresholds: 10 }))
   }</div>
 </div>
 
