@@ -71,10 +71,12 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 
 ```js
 const countAbove = (a, t) => a.filter(v => v > t).length
-const nonZeroMinersOverTime = Object.entries(SparkMinerRsrSummaries).map(([day, miners]) => ({
-    day: new Date(day),
-    count: countAbove(miners.map(m => m.success_rate), 0)
-}))
+const nonZeroMinersOverTime = Object.entries(SparkMinerRsrSummaries).flatMap(([day, miners]) => (
+  [
+    {day: new Date(day),
+    count_succes_rate: countAbove(miners.map(m => m.success_rate), 0), type: "Successful"},
+    {day: new Date(day),count_succes_rate_http: countAbove(miners.map(m => Number(m.success_rate_http) || 0), 0), type: "Successful Http"}
+]))
 const percentiles = Object.entries(SparkMinerRsrSummaries)
   .flatMap(([day, miners]) => [
     0.8,
@@ -86,7 +88,7 @@ const percentiles = Object.entries(SparkMinerRsrSummaries)
   ].map(above => ({
     day: new Date(day),
     label: `> ${above * 100}%`,
-    count: countAbove(miners.map(m => m.success_rate), above)
+    count_succes_rate: countAbove(miners.map(m => m.success_rate), above),
   })))
 ```
 
@@ -96,13 +98,20 @@ const percentiles = Object.entries(SparkMinerRsrSummaries)
       title: '# of Filecoin SPs with a non-zero Spark Retrieval Success Rate',
       x: { label: null },
       y: { grid: true, label: null },
+      color: { legend: true },
       marks: [
         Plot.ruleY([0]),
-        Plot.line(nonZeroMinersOverTime, {
+        Plot.lineY(nonZeroMinersOverTime, {
           x: 'day',
-          y: 'count',
-          stroke: "#FFBD3F",
-          curve: 'catmull-rom'
+          y: 'count_succes_rate',
+          stroke: "type",
+          curve: 'catmull-rom',
+        }),
+        Plot.lineY(nonZeroMinersOverTime, {
+          x: 'day',
+          y: 'count_succes_rate_http',
+          stroke: "type",
+          curve: 'catmull-rom',
         })
       ]
     })}
@@ -120,7 +129,7 @@ const percentiles = Object.entries(SparkMinerRsrSummaries)
         Plot.ruleY([0]),
         Plot.line(percentiles, {
           x: 'day',
-          y: 'count',
+          y: 'count_succes_rate',
           stroke: 'label',
           curve: 'catmull-rom'
         })
