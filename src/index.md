@@ -16,7 +16,10 @@ const SparkMinerRsrSummaries = FileAttachment("./data/spark-miner-rsr-summaries.
 ```
 
 ```js
-const nonZeroSparkMinerRates = SparkMinerRates.filter((record) => record.success_rate != 0)
+const nonZeroSparkMinerRatesAny = SparkMinerRates.filter((record) => record.success_rate != 0)
+const nonZeroSparkMinerRatesHttp = SparkMinerRates.filter((record) => record.success_rate_http != 0)
+const nonZeroSparkMinerRates = Array.from(new Set([...nonZeroSparkMinerRatesAny,...nonZeroSparkMinerRatesHttp ]
+.map(a => JSON.stringify(a)))).map(e => JSON.parse(e));
 const tidySparkMinerRates = SparkMinerRates
   .sort((recordA, recordB) => recordB.success_rate - recordA.success_rate)
   .map(record => ({ ...record, success_rate: `${(record.success_rate * 100).toFixed(2)}%`}))

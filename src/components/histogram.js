@@ -2,10 +2,17 @@ import * as Plot from 'npm:@observablehq/plot'
 import * as d3 from 'd3'
 
 export function Histogram (events, { width, title, thresholds }) {
-  const data = events.flatMap(d => [
-    { type: 'Successful Http', value: d.success_rate * 100 },
-    { type: 'Successful', value: d.success_rate_http * 100 }
-  ])
+    console.log(
+        `events: ${JSON.stringify(events)}, width: ${width}, title: ${title}, thresholds: ${thresholds}`
+    )
+  const data = events.flatMap(d => {
+    let res = Array.from([ { type: 'Successful', value: d.success_rate * 100 }]);
+    if (typeof d.success_rate_http != null && d.success_rate_http != undefined) {
+        res.push({ type: 'Successful Http', value: d.success_rate_http * 100 })
+    }
+    return res
+}
+  )
 
   const binnedData = Array.from(new Set(data.map(item => item.type))).flatMap(type => {
     const groupData = data.filter(d => d.type === type)
