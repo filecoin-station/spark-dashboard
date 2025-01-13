@@ -8,7 +8,7 @@ import { LineGraph } from "../components/line-graph.js";
 import { getDateXDaysAgo } from "../utils/date-utils.js";
 
 const rsrData = FileAttachment(`../data/${observable.params.provider}-spark-rsr-summary.json`).json();
-const ttfbData = FileAttachment(`../data/${observable.params.provider}-spark-retrieval-times-summary.json`).json();
+const ttfbData = FileAttachment(`../data/${observable.params.provider}-spark-retrieval-timings-summary.json`).json();
 ```
 
 
