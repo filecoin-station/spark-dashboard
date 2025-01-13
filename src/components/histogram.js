@@ -14,12 +14,12 @@ export function Histogram (events, { width, title, thresholds }) {
 }
   )
 
-  // We want to create a numer of evenly spaced bins (thresholds) in which we can collect each success rate value into 
+  // We want to create a number of evenly spaced bins (thresholds) in which we can collect each success rate value into 
   const binnedData = Array.from(new Set(data.map(item => item.type))).flatMap(type => {
     const groupData = data.filter(d => d.type === type)
     const bins = d3
       .bin()
-      // The rates are percentage values so the domain of the bins will be 0 to 100
+      // The rates are percentage values, so the domain of the bins will be 0 to 100
       .domain([0, 100])
       .thresholds(thresholds)(groupData.map(d => d.value))
 
