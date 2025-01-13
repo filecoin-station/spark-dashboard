@@ -74,8 +74,8 @@ const countAbove = (a, t) => a.filter(v => v > t).length
 const nonZeroMinersOverTime = Object.entries(SparkMinerRsrSummaries).flatMap(([day, miners]) => 
   [
     {day: new Date(day),
-    count_succes_rate: countAbove(miners.map(m => m.success_rate), 0), type: "Successful"},
-    {day: new Date(day),count_succes_rate_http: miners.some((m)=> m.success_rate_http != null )? countAbove(miners.map(m => m.success_rate_http), 0):null, type: "Successful Http"}
+    count_succes_rate: countAbove(miners.map(m => m.success_rate), 0), type: "HTTP or Graphsync"},
+    {day: new Date(day),count_succes_rate_http: miners.some((m)=> m.success_rate_http != null )? countAbove(miners.map(m => m.success_rate_http), 0):null, type: "HTTP only"}
 ])
 const percentiles = Object.entries(SparkMinerRsrSummaries)
   .flatMap(([day, miners]) => [

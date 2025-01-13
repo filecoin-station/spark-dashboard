@@ -11,12 +11,12 @@ export function LineGraph (events, { width, height, title, start, end } = {}) {
     ...filteredEvents.map((event) => ({
       day: event.day,
       success_rate: event.success_rate,
-      type: 'Successful'
+      type: 'HTTP or Graphsync'
     })),
     ...filteredEvents.map((event) => ({
       day: event.day,
       success_rate_http: event.success_rate_http,
-      type: 'Successful Http'
+      type: 'HTTP only'
     }))
   ]
 
