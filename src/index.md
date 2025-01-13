@@ -236,7 +236,7 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
       marks: [
         Plot.lineY(SparkRetrievalTimes, {
           x: 'day',
-          y: 'ttfb_p50',
+          y: 'ttfb_ms',
           stroke: "#FFBD3F",
         })
       ]

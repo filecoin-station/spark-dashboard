@@ -41,7 +41,7 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
       marks: [
         Plot.lineY(ttfbData, {
           x: 'day',
-          y: 'ttfb_p50',
+          y: 'ttfb_ms',
           stroke: "#FFBD3F",
         })
       ]
