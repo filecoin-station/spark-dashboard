@@ -4,17 +4,22 @@ import * as d3 from 'd3'
 export function Histogram (events, { width, title, thresholds }) {
   const data = events.flatMap(d => {
     let res = Array.from([ { type: 'Successful', value: d.success_rate * 100 }]);
-    if (typeof d.success_rate_http != null && d.success_rate_http != undefined) {
+    // We only want to count the http success rate if it is not null
+    // When querying miner data, an http of null means that the miner has never been tested using http
+    // A value of 0 means that the miner has been tested but has never been successful. 
+    if (d.success_rate_http != null) {
         res.push({ type: 'Successful Http', value: d.success_rate_http * 100 })
     }
     return res
 }
   )
 
+  // We want to create a numer of evenly spaced bins (thresholds) in which we can collect each success rate value into 
   const binnedData = Array.from(new Set(data.map(item => item.type))).flatMap(type => {
     const groupData = data.filter(d => d.type === type)
     const bins = d3
       .bin()
+      // The rates are percentage values so the domain of the bins will be 0 to 100
       .domain([0, 100])
       .thresholds(thresholds)(groupData.map(d => d.value))
 
@@ -48,6 +53,6 @@ export function Histogram (events, { width, title, thresholds }) {
     },
     width,
     title,
-    facet: { label: 'Rate Ranges' }
+    facet: { label: 'Rate Ranges in %' }
   })
 }

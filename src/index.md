@@ -101,13 +101,13 @@ const percentiles = Object.entries(SparkMinerRsrSummaries)
       color: { legend: true },
       marks: [
         Plot.ruleY([0]),
-        Plot.lineY(nonZeroMinersOverTime, {
+        Plot.line(nonZeroMinersOverTime, {
           x: 'day',
           y: 'count_succes_rate',
           stroke: "type",
           curve: 'catmull-rom',
         }),
-        Plot.lineY(nonZeroMinersOverTime, {
+        Plot.line(nonZeroMinersOverTime, {
           x: 'day',
           y: 'count_succes_rate_http',
           stroke: "type",
