@@ -20,7 +20,7 @@ const SparkRetrievalTimes = FileAttachment("./data/spark-retrieval-timings.json"
 const nonZeroSparkMinerRates = SparkMinerRates.filter((record) => record.success_rate != 0)
 const tidySparkMinerRates = SparkMinerRates
   .sort((recordA, recordB) => recordB.success_rate - recordA.success_rate)
-  .map(record => ({ ...record, success_rate: `${(record.success_rate * 100).toFixed(2)}%`}))
+  .map(record => ({ ...record, success_rate: `${(record.success_rate * 100).toFixed(2)}%`,success_rate_http: `${(record.success_rate_http * 100).toFixed(2)}%`}))
 ```
 
 <div class="hero">
@@ -61,7 +61,7 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
     resize((width) => Histogram(SparkMinerRates, { width, title: "Retrieval Success Rate Buckets", thresholds: 10 }))
   }</div>
   <div class="card">${
-    resize((width) => Histogram(nonZeroSparkMinerRates, { width, title: "Non-zero Miners: Retrieval Success Rate Buckets", thresholds: 10 }))
+    resize((width) => Histogram(nonZeroSparkMinerRates.map((record) => ({success_rate: record.success_rate, success_rate_http: record.success_rate_http? record.success_rate_http: null})), { width, title: "Non-zero Miners: Retrieval Success Rate Buckets", thresholds: 10 }))
   }</div>
 </div>
 
@@ -72,10 +72,12 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 
 ```js
 const countAbove = (a, t) => a.filter(v => v > t).length
-const nonZeroMinersOverTime = Object.entries(SparkMinerRsrSummaries).map(([day, miners]) => ({
-    day: new Date(day),
-    count: countAbove(miners.map(m => m.success_rate), 0)
-}))
+const nonZeroMinersOverTime = Object.entries(SparkMinerRsrSummaries).flatMap(([day, miners]) => 
+  [
+    {day: new Date(day),
+    count_succes_rate: countAbove(miners.map(m => m.success_rate), 0), type: "HTTP or Graphsync"},
+    {day: new Date(day),count_succes_rate_http: miners.some((m)=> m.success_rate_http != null )? countAbove(miners.map(m => m.success_rate_http), 0):null, type: "HTTP only"}
+])
 const percentiles = Object.entries(SparkMinerRsrSummaries)
   .flatMap(([day, miners]) => [
     0.8,
@@ -87,7 +89,7 @@ const percentiles = Object.entries(SparkMinerRsrSummaries)
   ].map(above => ({
     day: new Date(day),
     label: `> ${above * 100}%`,
-    count: countAbove(miners.map(m => m.success_rate), above)
+    count_succes_rate: countAbove(miners.map(m => m.success_rate), above),
   })))
 ```
 
@@ -97,13 +99,20 @@ const percentiles = Object.entries(SparkMinerRsrSummaries)
       title: '# of Filecoin SPs with a non-zero Spark Retrieval Success Rate',
       x: { label: null },
       y: { grid: true, label: null },
+      color: { legend: true },
       marks: [
         Plot.ruleY([0]),
         Plot.line(nonZeroMinersOverTime, {
           x: 'day',
-          y: 'count',
-          stroke: "#FFBD3F",
-          curve: 'catmull-rom'
+          y: 'count_succes_rate',
+          stroke: "type",
+          curve: 'catmull-rom',
+        }),
+        Plot.line(nonZeroMinersOverTime, {
+          x: 'day',
+          y: 'count_succes_rate_http',
+          stroke: "type",
+          curve: 'catmull-rom',
         })
       ]
     })}
@@ -121,7 +130,7 @@ const percentiles = Object.entries(SparkMinerRsrSummaries)
         Plot.ruleY([0]),
         Plot.line(percentiles, {
           x: 'day',
-          y: 'count',
+          y: 'count_succes_rate',
           stroke: 'label',
           curve: 'catmull-rom'
         })
