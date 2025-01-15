@@ -148,7 +148,7 @@ const percentiles = Object.entries(SparkMinerRsrSummaries)
     <body>This section shows the Spark Retrieval Result Codes breakdown.</body>
   </div>
   <div>
-    <h4>Spark Miner Time To First Byte</h4>
+    <h4>Spark Time To First Byte</h4>
     <body>This section shows overall median time to first byte for whole network.</body>
   </div>
 </div>
