@@ -11,6 +11,7 @@ import { combine, move, clone } from "./utils/ratios-utils.js";
 const SparkRates = FileAttachment("./data/spark-rsr.json").json();
 const SparkNonZeroRates = FileAttachment("./data/spark-rsr-non-zero.json").json();
 const SparkMinerRates = FileAttachment("./data/spark-miners-rsr.json").json();
+const SparkMinerRetrievalTimings = FileAttachment("./data/spark-miners-retrieval-timings.json").json();
 const SparkRetrievalResultCodes = FileAttachment("./data/spark-retrieval-result-codes.json").json();
 const SparkMinerRsrSummaries = FileAttachment("./data/spark-miner-rsr-summaries.json").json();
 const SparkRetrievalTimes = FileAttachment("./data/spark-retrieval-timings.json").json();
@@ -20,7 +21,10 @@ const SparkRetrievalTimes = FileAttachment("./data/spark-retrieval-timings.json"
 const nonZeroSparkMinerRates = SparkMinerRates.filter((record) => record.success_rate != 0)
 const tidySparkMinerRates = SparkMinerRates
   .sort((recordA, recordB) => recordB.success_rate - recordA.success_rate)
-  .map(record => ({ ...record, success_rate: `${(record.success_rate * 100).toFixed(2)}%`,success_rate_http: `${(record.success_rate_http * 100).toFixed(2)}%`}))
+  .map(record => {
+    const { ttfb_ms } = SparkMinerRetrievalTimings.find((ttfbRecord) => ttfbRecord.miner_id === record.miner_id) ?? {};
+    return { ...record, ttfb_ms, success_rate: `${(record.success_rate * 100).toFixed(2)}%`,success_rate_http: `${(record.success_rate_http * 100).toFixed(2)}%`}
+  })
 ```
 
 <div class="hero">
@@ -271,8 +275,8 @@ ${JSON.stringify(
 
 <div class="divider"></div>
 
-<h4>Spark Miner RSR Table</h4>
-<body>The following table shows the Spark RSR values calculated in aggregate for each Filecoin Storage Provider over the past 30 days. Click on a miner id to view stats about this storage provider.</body>
+<h4>Spark Miner Stats Table</h4>
+<body>The following table shows the Spark RSR and TTFB values calculated in aggregate for each Filecoin Storage Provider over the past 30 days. Click on a miner id to view stats about this storage provider.</body>
 
 ```js
 const search = view(Inputs.search(tidySparkMinerRates, {placeholder: "Search Storage Providers…"}));
