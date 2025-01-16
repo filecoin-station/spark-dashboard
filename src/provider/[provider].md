@@ -32,7 +32,7 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
     <body>This section shows the storage provider Spark Retrieval Success Rate Score summary.</body>
   </div>
   <div>
-    <h4>Spark Miner Time To First Byte (TTFB)</h4>
+    <h4>Storage Provider Spark Time To First Byte (TTFB)</h4>
     <body>The section shows the median of all TTFB values for successful retrieval checks of this storage provider.</body>
   </div>
 </div>
