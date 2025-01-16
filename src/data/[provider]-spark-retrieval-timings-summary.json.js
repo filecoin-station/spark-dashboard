@@ -9,7 +9,7 @@ const {
     options: { provider: { type: "string" } }
 });
 
-const start = '2024-04-07';
+const start = '2025-01-01';
 const end = getDateXDaysAgo(1);
 
 const summary = await pRetry(() => jsonFetcher(`https://stats.filspark.com/miner/${provider}/retrieval-timings/summary?from=${start}&to=${end}`), { retries: 3 });
