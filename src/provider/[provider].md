@@ -18,10 +18,6 @@ const ttfbData = FileAttachment(`../data/${observable.params.provider}-spark-ret
     <body><a href="https://filspark.com/dashboard" target="_blank" rel="noopener noreferrer">(Click here for Legacy Spark Grafana Dashboard)</a><body>
 </div>
 
-<h4>Storage Provider Spark RSR Summary</h4>
-<body>This section shows the storage provider Spark Retrieval Success Rate Score summary. You can adjust the date range. Records start on the 7th April 2024.</body>
-
-
 ```js
 const start = view(Inputs.date({label: "Start", value: getDateXDaysAgo(180) }));
 const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
@@ -29,15 +25,28 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
 
 <h3>Stats for ${observable.params.provider}</h3>
 
+
+<div class="grid grid-cols-2">
+  <div>
+    <h4>Storage Provider Spark RSR Summary</h4>
+    <body>This section shows the storage provider Spark Retrieval Success Rate Score summary.</body>
+  </div>
+  <div>
+    <h4>Spark Miner Time To First Byte (TTFB)</h4>
+    <body>The section shows the median of all TTFB values for valid miner retrieval tasks.</body>
+  </div>
+</div>
+
+
 <div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
   <div class="card">${
     resize((width) => LineGraph(rsrData, {width, title: "Retrieval Success Rate", start, end }))
   }</div>
   <div class="card">
       ${Plot.plot({
-      title: 'Time to First Byte (TTFB)',
-      x: { type: 'utc', ticks: 'month' },
-      y: { grid: true, label: 'P50 (ms)' },
+      title: 'Time to First Byte (ms)',
+      x: { type: 'utc', ticks: 'month', label: 'month' },
+      y: { grid: true },
       marks: [
         Plot.lineY(ttfbData, {
           x: 'day',
