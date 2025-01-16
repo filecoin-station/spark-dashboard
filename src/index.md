@@ -245,7 +245,7 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
       ${Plot.plot({
       title: 'Time to First Byte (ms)',
       x: { type: 'utc', ticks: 'day' }, // TODO: Change tick to month once we have more data
-      y: { grid: true },
+      y: { grid: true, zero: true},
       marks: [
         Plot.lineY(SparkRetrievalTimes, {
           x: 'day',
