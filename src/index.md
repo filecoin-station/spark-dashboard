@@ -27,8 +27,10 @@ const tidySparkMinerRates = SparkMinerRates
     <h2>Dashboard</h2>
     <body><a href="https://filspark.com/dashboard" target="_blank" rel="noopener noreferrer">(Click here for Legacy Spark Grafana Dashboard)</a><body>
     <div class="grid grid-cols-2" >
-      <div><a href="https://checker.network" ><img src="media/checker-with-bbox.png" alt="Checker Logo" width="100" /></a></div>
+      <div><a href="https://checker.network" ><img src="media/checker-with-bbox.png" alt="Checker Logo" width="100" /></a>
+      </div>
       <div><a href="https://filecoin.io"><img src="media/fil-logo-bounding-box.png" alt="Filecoin Logo" width="100" /></a>
+      </div>
     </div>
 </div>
 
