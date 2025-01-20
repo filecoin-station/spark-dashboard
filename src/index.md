@@ -18,11 +18,16 @@ const SparkRetrievalTimes = FileAttachment("./data/spark-retrieval-timings.json"
 ```
 
 ```js
+const sparkMinerRetrievalTimingsMap = SparkMinerRetrievalTimings.reduce((acc, record) => {
+  acc[record.miner_id] = record;
+  return acc;
+}, {});
+
 const nonZeroSparkMinerRates = SparkMinerRates.filter((record) => record.success_rate != 0)
 const tidySparkMinerRates = SparkMinerRates
   .sort((recordA, recordB) => recordB.success_rate - recordA.success_rate)
   .map(record => {
-    const { ttfb_ms } = SparkMinerRetrievalTimings.find((ttfbRecord) => ttfbRecord.miner_id === record.miner_id) ?? {};
+    const { ttfb_ms } = sparkMinerRetrievalTimingsMap[record.miner_id] ?? {};
     return { ...record, ttfb_ms, success_rate: `${(record.success_rate * 100).toFixed(2)}%`,success_rate_http: `${(record.success_rate_http * 100).toFixed(2)}%`}
   })
 ```
