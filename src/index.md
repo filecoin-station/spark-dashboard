@@ -3,26 +3,26 @@ toc: false
 ---
 
 ```js
-import { LineGraph } from "./components/line-graph.js";
-import { Histogram } from "./components/histogram.js";
-import { todayInFormat, getDateXDaysAgo } from "./utils/date-utils.js";
-import { combine, move, clone } from "./utils/ratios-utils.js";
-const SparkRates = FileAttachment("./data/spark-rsr.json").json();
+import { LineGraph } from './components/line-graph.js';
+import { Histogram } from './components/histogram.js';
+import { todayInFormat, getDateXDaysAgo } from './utils/date-utils.js';
+import { combine, move, clone } from './utils/ratios-utils.js';
+const SparkRates = FileAttachment('./data/spark-rsr.json').json();
 const SparkNonZeroRates = FileAttachment(
-  "./data/spark-rsr-non-zero.json",
+  './data/spark-rsr-non-zero.json',
 ).json();
-const SparkMinerRates = FileAttachment("./data/spark-miners-rsr.json").json();
+const SparkMinerRates = FileAttachment('./data/spark-miners-rsr.json').json();
 const SparkMinerRetrievalTimings = FileAttachment(
-  "./data/spark-miners-retrieval-timings.json",
+  './data/spark-miners-retrieval-timings.json',
 ).json();
 const SparkRetrievalResultCodes = FileAttachment(
-  "./data/spark-retrieval-result-codes.json",
+  './data/spark-retrieval-result-codes.json',
 ).json();
 const SparkMinerRsrSummaries = FileAttachment(
-  "./data/spark-miner-rsr-summaries.json",
+  './data/spark-miner-rsr-summaries.json',
 ).json();
 const SparkRetrievalTimes = FileAttachment(
-  "./data/spark-retrieval-timings.json",
+  './data/spark-retrieval-timings.json',
 ).json();
 ```
 
@@ -68,9 +68,9 @@ const tidySparkMinerRates = SparkMinerRates.sort(
 
 ```js
 const start = view(
-  Inputs.date({ label: "Start", value: getDateXDaysAgo(180) }),
+  Inputs.date({ label: 'Start', value: getDateXDaysAgo(180) }),
 );
-const end = view(Inputs.date({ label: "End", value: getDateXDaysAgo(1) }));
+const end = view(Inputs.date({ label: 'End', value: getDateXDaysAgo(1) }));
 ```
 
 <div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
@@ -111,7 +111,7 @@ const nonZeroMinersOverTime = Object.entries(SparkMinerRsrSummaries).flatMap(
         miners.map((m) => m.success_rate),
         0,
       ),
-      type: "HTTP or Graphsync",
+      type: 'HTTP or Graphsync',
     },
     {
       day: new Date(day),
@@ -121,7 +121,7 @@ const nonZeroMinersOverTime = Object.entries(SparkMinerRsrSummaries).flatMap(
             0,
           )
         : null,
-      type: "HTTP only",
+      type: 'HTTP only',
     },
   ],
 );
@@ -199,20 +199,20 @@ const percentiles = Object.entries(SparkMinerRsrSummaries).flatMap(
 
 ```js
 const mapping = {
-  "HTTP 5xx": [/^HTTP_5/, /^ERROR_5/, "BAD_GATEWAY", "GATEWAY_TIMEOUT"],
-  "Graphsync timeout": ["LASSIE_504"],
-  "Graphsync error": [/^LASSIE_(?!504)/],
-  "IPNI no advertisement": ["IPNI_ERROR_404", "IPNI_NO_VALID_ADVERTISEMENT"],
-  "IPNI error": [/^IPNI_ERROR_/],
+  'HTTP 5xx': [/^HTTP_5/, /^ERROR_5/, 'BAD_GATEWAY', 'GATEWAY_TIMEOUT'],
+  'Graphsync timeout': ['LASSIE_504'],
+  'Graphsync error': [/^LASSIE_(?!504)/],
+  'IPNI no advertisement': ['IPNI_ERROR_404', 'IPNI_NO_VALID_ADVERTISEMENT'],
+  'IPNI error': [/^IPNI_ERROR_/],
   Other: [
-    "CANNOT_PARSE_CAR_FILE",
-    "CAR_TOO_LARGE",
-    "UNKNOWN_FETCH_ERROR",
-    "HOSTNAME_DNS_ERROR",
-    "CONNECTION_REFUSED",
-    "UNSUPPORTED_MULTIADDR_FORMAT",
+    'CANNOT_PARSE_CAR_FILE',
+    'CAR_TOO_LARGE',
+    'UNKNOWN_FETCH_ERROR',
+    'HOSTNAME_DNS_ERROR',
+    'CONNECTION_REFUSED',
+    'UNSUPPORTED_MULTIADDR_FORMAT',
     /^ERROR_4/,
-    "TIMEOUT",
+    'TIMEOUT',
   ],
 };
 ```
@@ -226,17 +226,17 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
     combine(rates, label, codes);
   }
   const sorted = {};
-  move(rates, sorted, "OK");
-  move(rates, sorted, "HTTP 5xx");
-  move(rates, sorted, "Graphsync error");
-  move(rates, sorted, "IPNI error");
-  move(rates, sorted, "IPNI no advertisement");
+  move(rates, sorted, 'OK');
+  move(rates, sorted, 'HTTP 5xx');
+  move(rates, sorted, 'Graphsync error');
+  move(rates, sorted, 'IPNI error');
+  move(rates, sorted, 'IPNI no advertisement');
   for (const [key, value] of Object.entries(rates)) {
-    if (key !== "Other") {
+    if (key !== 'Other') {
       move(rates, sorted, key);
     }
   }
-  move(rates, sorted, "Other");
+  move(rates, sorted, 'Other');
 
   return Object.entries(sorted).map(([code, rate]) => ({
     day: new Date(day),
@@ -311,7 +311,7 @@ ${JSON.stringify(
 ```js
 const search = view(
   Inputs.search(tidySparkMinerRates, {
-    placeholder: "Search Storage Providers…",
+    placeholder: 'Search Storage Providers…',
   }),
 );
 ```

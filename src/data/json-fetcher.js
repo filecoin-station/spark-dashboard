@@ -1,4 +1,4 @@
-import { AbortError } from "p-retry";
+import { AbortError } from 'p-retry';
 
 export async function jsonFetcher(url) {
   const response = await fetch(url, {

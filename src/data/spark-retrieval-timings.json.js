@@ -1,8 +1,8 @@
-import pRetry from "p-retry";
-import { jsonFetcher } from "./json-fetcher.js";
-import { getDateXDaysAgo } from "../utils/date-utils.js";
+import pRetry from 'p-retry';
+import { jsonFetcher } from './json-fetcher.js';
+import { getDateXDaysAgo } from '../utils/date-utils.js';
 
-const start = "2025-01-14";
+const start = '2025-01-14';
 const end = getDateXDaysAgo(1);
 
 const summary = await pRetry(

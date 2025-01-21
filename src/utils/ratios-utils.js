@@ -1,7 +1,7 @@
 export const combine = (obj, target, keys) => {
   const matches = Object.keys(obj).filter((key) => {
     return keys.find((query) => {
-      return typeof query === "string" ? key === query : query.test(key);
+      return typeof query === 'string' ? key === query : query.test(key);
     });
   });
   const clone = { ...obj };

@@ -1,5 +1,5 @@
-import { jsonFetcher } from "./json-fetcher.js";
-import { getDateXDaysAgo } from "../utils/date-utils.js";
+import { jsonFetcher } from './json-fetcher.js';
+import { getDateXDaysAgo } from '../utils/date-utils.js';
 
 const from = getDateXDaysAgo(91);
 const to = getDateXDaysAgo(1);

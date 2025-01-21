@@ -1,16 +1,16 @@
-import * as Plot from "npm:@observablehq/plot";
-import * as d3 from "d3";
+import * as Plot from 'npm:@observablehq/plot';
+import * as d3 from 'd3';
 
 export function Histogram(events, { width, title, thresholds }) {
   const data = events.flatMap((d) => {
     const res = Array.from([
-      { type: "HTTP or Graphsync", value: d.success_rate * 100 },
+      { type: 'HTTP or Graphsync', value: d.success_rate * 100 },
     ]);
     // We only want to count the http success rate if it is not null
     // When querying the summary per miner, an http of null means that the miner has never been tested using http
     // A value of 0 means that the miner has been tested at some point in time but has never been successful.
     if (d.success_rate_http != null) {
-      res.push({ type: "HTTP only", value: d.success_rate_http * 100 });
+      res.push({ type: 'HTTP only', value: d.success_rate_http * 100 });
     }
     return res;
   });
@@ -36,10 +36,10 @@ export function Histogram(events, { width, title, thresholds }) {
   return Plot.plot({
     marks: [
       Plot.barY(binnedData, {
-        fx: "threshold",
-        y: "count",
-        x: "type",
-        fill: "type",
+        fx: 'threshold',
+        y: 'count',
+        x: 'type',
+        fill: 'type',
       }),
     ],
     y: { grid: true },
@@ -49,10 +49,10 @@ export function Histogram(events, { width, title, thresholds }) {
     },
     color: {
       legend: true,
-      label: "Type",
+      label: 'Type',
     },
     width,
     title,
-    facet: { label: "Rate Ranges in %" },
+    facet: { label: 'Rate Ranges in %' },
   });
 }
