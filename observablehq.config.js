@@ -1,15 +1,13 @@
-import { jsonFetcher } from './src/data/json-fetcher.js';
-import { getDateXDaysAgo } from './src/utils/date-utils.js';
+import { jsonFetcher } from './src/data/json-fetcher.js'
+import { getDateXDaysAgo } from './src/utils/date-utils.js'
 
-const start = '2024-04-07';
-const end = getDateXDaysAgo(1);
+const start = '2024-04-07'
+const end = getDateXDaysAgo(1)
 
 const result = await jsonFetcher(
   `https://stats.filspark.com/miners/retrieval-success-rate/summary?from=${start}&to=${end}`,
-);
-const providerPaths = result.map(
-  (provider) => `/provider/${provider.miner_id}`,
-);
+)
+const providerPaths = result.map((provider) => `/provider/${provider.miner_id}`)
 
 // See https://observablehq.com/framework/config for documentation.
 export default {
@@ -48,4 +46,4 @@ export default {
   // typographer: false, // smart quotes and other typographic improvements
   // cleanUrls: true, // drop .html from URLs
   dynamicPaths: providerPaths,
-};
+}

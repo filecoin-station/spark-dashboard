@@ -4,15 +4,15 @@ title: Storage Provider Summary
 ---
 
 ```js
-import { LineGraph } from '../components/line-graph.js';
-import { getDateXDaysAgo } from '../utils/date-utils.js';
+import { LineGraph } from '../components/line-graph.js'
+import { getDateXDaysAgo } from '../utils/date-utils.js'
 
 const rsrData = FileAttachment(
   `../data/${observable.params.provider}-spark-rsr-summary.json`,
-).json();
+).json()
 const ttfbData = FileAttachment(
   `../data/${observable.params.provider}-spark-retrieval-timings-summary.json`,
-).json();
+).json()
 ```
 
 <div class="hero">
@@ -22,10 +22,8 @@ const ttfbData = FileAttachment(
 </div>
 
 ```js
-const start = view(
-  Inputs.date({ label: 'Start', value: getDateXDaysAgo(180) }),
-);
-const end = view(Inputs.date({ label: 'End', value: getDateXDaysAgo(1) }));
+const start = view(Inputs.date({ label: 'Start', value: getDateXDaysAgo(180) }))
+const end = view(Inputs.date({ label: 'End', value: getDateXDaysAgo(1) }))
 ```
 
 <h3>Stats for ${observable.params.provider}</h3>

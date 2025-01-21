@@ -1,16 +1,16 @@
-import pRetry from 'p-retry';
-import { jsonFetcher } from './json-fetcher.js';
-import { getDateXDaysAgo } from '../utils/date-utils.js';
-import { parseArgs } from 'node:util';
+import pRetry from 'p-retry'
+import { jsonFetcher } from './json-fetcher.js'
+import { getDateXDaysAgo } from '../utils/date-utils.js'
+import { parseArgs } from 'node:util'
 
 const {
   values: { provider },
 } = parseArgs({
   options: { provider: { type: 'string' } },
-});
+})
 
-const start = '2025-01-14';
-const end = getDateXDaysAgo(1);
+const start = '2025-01-14'
+const end = getDateXDaysAgo(1)
 
 const summary = await pRetry(
   () =>
@@ -18,6 +18,6 @@ const summary = await pRetry(
       `https://stats.filspark.com/miner/${provider}/retrieval-timings/summary?from=${start}&to=${end}`,
     ),
   { retries: 3 },
-);
+)
 
-process.stdout.write(JSON.stringify(summary));
+process.stdout.write(JSON.stringify(summary))

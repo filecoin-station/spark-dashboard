@@ -1,12 +1,12 @@
-import * as Plot from 'npm:@observablehq/plot';
+import * as Plot from 'npm:@observablehq/plot'
 
 export function LineGraph(events, { width, height, title, start, end } = {}) {
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+  const startDate = new Date(start)
+  const endDate = new Date(end)
   const filteredEvents = events.filter((event) => {
-    const eventDate = new Date(event.day);
-    return eventDate >= startDate && eventDate < endDate;
-  });
+    const eventDate = new Date(event.day)
+    return eventDate >= startDate && eventDate < endDate
+  })
   const combinedData = [
     ...filteredEvents.map((event) => ({
       day: event.day,
@@ -18,7 +18,7 @@ export function LineGraph(events, { width, height, title, start, end } = {}) {
       success_rate_http: event.success_rate_http,
       type: 'HTTP only',
     })),
-  ];
+  ]
 
   return Plot.plot({
     title,
@@ -41,5 +41,5 @@ export function LineGraph(events, { width, height, title, start, end } = {}) {
         curve: 'linear',
       }),
     ],
-  });
+  })
 }

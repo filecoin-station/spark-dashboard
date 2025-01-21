@@ -3,52 +3,52 @@ toc: false
 ---
 
 ```js
-import { LineGraph } from './components/line-graph.js';
-import { Histogram } from './components/histogram.js';
-import { todayInFormat, getDateXDaysAgo } from './utils/date-utils.js';
-import { combine, move, clone } from './utils/ratios-utils.js';
-const SparkRates = FileAttachment('./data/spark-rsr.json').json();
+import { LineGraph } from './components/line-graph.js'
+import { Histogram } from './components/histogram.js'
+import { todayInFormat, getDateXDaysAgo } from './utils/date-utils.js'
+import { combine, move, clone } from './utils/ratios-utils.js'
+const SparkRates = FileAttachment('./data/spark-rsr.json').json()
 const SparkNonZeroRates = FileAttachment(
   './data/spark-rsr-non-zero.json',
-).json();
-const SparkMinerRates = FileAttachment('./data/spark-miners-rsr.json').json();
+).json()
+const SparkMinerRates = FileAttachment('./data/spark-miners-rsr.json').json()
 const SparkMinerRetrievalTimings = FileAttachment(
   './data/spark-miners-retrieval-timings.json',
-).json();
+).json()
 const SparkRetrievalResultCodes = FileAttachment(
   './data/spark-retrieval-result-codes.json',
-).json();
+).json()
 const SparkMinerRsrSummaries = FileAttachment(
   './data/spark-miner-rsr-summaries.json',
-).json();
+).json()
 const SparkRetrievalTimes = FileAttachment(
   './data/spark-retrieval-timings.json',
-).json();
+).json()
 ```
 
 ```js
 const sparkMinerRetrievalTimingsMap = SparkMinerRetrievalTimings.reduce(
   (acc, record) => {
-    acc[record.miner_id] = record;
-    return acc;
+    acc[record.miner_id] = record
+    return acc
   },
   {},
-);
+)
 
 const nonZeroSparkMinerRates = SparkMinerRates.filter(
   (record) => record.success_rate != 0,
-);
+)
 const tidySparkMinerRates = SparkMinerRates.sort(
   (recordA, recordB) => recordB.success_rate - recordA.success_rate,
 ).map((record) => {
-  const { ttfb_ms } = sparkMinerRetrievalTimingsMap[record.miner_id] ?? {};
+  const { ttfb_ms } = sparkMinerRetrievalTimingsMap[record.miner_id] ?? {}
   return {
     ...record,
     ttfb_ms,
     success_rate: `${(record.success_rate * 100).toFixed(2)}%`,
     success_rate_http: `${(record.success_rate_http * 100).toFixed(2)}%`,
-  };
-});
+  }
+})
 ```
 
 <div class="hero">
@@ -67,10 +67,8 @@ const tidySparkMinerRates = SparkMinerRates.sort(
 <body>This section shows the overall Spark Retrieval Success Rate Score of Filecoin. You can adjust the date range. Records start on the 7th April 2024.</body>
 
 ```js
-const start = view(
-  Inputs.date({ label: 'Start', value: getDateXDaysAgo(180) }),
-);
-const end = view(Inputs.date({ label: 'End', value: getDateXDaysAgo(1) }));
+const start = view(Inputs.date({ label: 'Start', value: getDateXDaysAgo(180) }))
+const end = view(Inputs.date({ label: 'End', value: getDateXDaysAgo(1) }))
 ```
 
 <div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
@@ -102,7 +100,7 @@ const end = view(Inputs.date({ label: 'End', value: getDateXDaysAgo(1) }));
 <body></body>
 
 ```js
-const countAbove = (a, t) => a.filter((v) => v > t).length;
+const countAbove = (a, t) => a.filter((v) => v > t).length
 const nonZeroMinersOverTime = Object.entries(SparkMinerRsrSummaries).flatMap(
   ([day, miners]) => [
     {
@@ -124,7 +122,7 @@ const nonZeroMinersOverTime = Object.entries(SparkMinerRsrSummaries).flatMap(
       type: 'HTTP only',
     },
   ],
-);
+)
 const percentiles = Object.entries(SparkMinerRsrSummaries).flatMap(
   ([day, miners]) =>
     [0.8, 0.9, 0.95, 0.99, 0.995, 0.999].map((above) => ({
@@ -135,7 +133,7 @@ const percentiles = Object.entries(SparkMinerRsrSummaries).flatMap(
         above,
       ),
     })),
-);
+)
 ```
 
 <div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
@@ -214,36 +212,36 @@ const mapping = {
     /^ERROR_4/,
     'TIMEOUT',
   ],
-};
+}
 ```
 
 ```js
 const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
   for (const [key, value] of Object.entries(rates)) {
-    rates[key] = Number(value);
+    rates[key] = Number(value)
   }
   for (const [label, codes] of Object.entries(mapping)) {
-    combine(rates, label, codes);
+    combine(rates, label, codes)
   }
-  const sorted = {};
-  move(rates, sorted, 'OK');
-  move(rates, sorted, 'HTTP 5xx');
-  move(rates, sorted, 'Graphsync error');
-  move(rates, sorted, 'IPNI error');
-  move(rates, sorted, 'IPNI no advertisement');
+  const sorted = {}
+  move(rates, sorted, 'OK')
+  move(rates, sorted, 'HTTP 5xx')
+  move(rates, sorted, 'Graphsync error')
+  move(rates, sorted, 'IPNI error')
+  move(rates, sorted, 'IPNI no advertisement')
   for (const [key, value] of Object.entries(rates)) {
     if (key !== 'Other') {
-      move(rates, sorted, key);
+      move(rates, sorted, key)
     }
   }
-  move(rates, sorted, 'Other');
+  move(rates, sorted, 'Other')
 
   return Object.entries(sorted).map(([code, rate]) => ({
     day: new Date(day),
     code,
     rate,
-  }));
-});
+  }))
+})
 ```
 
 <div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
@@ -313,7 +311,7 @@ const search = view(
   Inputs.search(tidySparkMinerRates, {
     placeholder: 'Search Storage Providers…',
   }),
-);
+)
 ```
 
 <div class="card" style="padding: 0;">
