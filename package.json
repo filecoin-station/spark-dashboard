@@ -7,7 +7,7 @@
     "dev": "observable preview",
     "deploy": "observable deploy",
     "observable": "observable",
-    "test": "standard",
+    "test": "standard"
   },
   "dependencies": {
     "@observablehq/framework": "^1.12.0",
