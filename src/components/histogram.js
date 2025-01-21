@@ -3,18 +3,18 @@ import * as d3 from 'd3'
 
 export function Histogram (events, { width, title, thresholds }) {
   const data = events.flatMap(d => {
-    let res = Array.from([ { type: 'HTTP or Graphsync', value: d.success_rate * 100 }]);
+    const res = Array.from([{ type: 'HTTP or Graphsync', value: d.success_rate * 100 }])
     // We only want to count the http success rate if it is not null
     // When querying the summary per miner, an http of null means that the miner has never been tested using http
-    // A value of 0 means that the miner has been tested at some point in time but has never been successful. 
+    // A value of 0 means that the miner has been tested at some point in time but has never been successful.
     if (d.success_rate_http != null) {
-        res.push({ type: 'HTTP only', value: d.success_rate_http * 100 })
+      res.push({ type: 'HTTP only', value: d.success_rate_http * 100 })
     }
     return res
-}
+  }
   )
 
-  // We want to create a number of evenly spaced bins (thresholds) in which we can collect each success rate value into 
+  // We want to create a number of evenly spaced bins (thresholds) in which we can collect each success rate value into
   const binnedData = Array.from(new Set(data.map(item => item.type))).flatMap(type => {
     const groupData = data.filter(d => d.type === type)
     const bins = d3
