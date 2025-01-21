@@ -7,7 +7,7 @@
     "dev": "observable preview",
     "deploy": "observable deploy",
     "observable": "observable",
-    "test": "standard"
+    "test": "prettier --check ."
   },
   "dependencies": {
     "@observablehq/framework": "^1.12.0",
@@ -17,8 +17,8 @@
     "p-retry": "^6.2.1"
   },
   "devDependencies": {
-    "rimraf": "^5.0.5",
-    "standard": "^17.1.2"
+    "prettier": "^3.4.2",
+    "rimraf": "^5.0.5"
   },
   "engines": {
     "node": ">=18"
