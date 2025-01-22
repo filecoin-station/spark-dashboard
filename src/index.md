@@ -196,13 +196,28 @@ const percentiles = Object.entries(SparkMinerRsrSummaries).flatMap(
 </div>
 
 ```js
+// prettier-ignore
 const mapping = {
-  'HTTP 5xx': [/^HTTP_5/, /^ERROR_5/, 'BAD_GATEWAY', 'GATEWAY_TIMEOUT'],
-  'Graphsync timeout': ['LASSIE_504'],
-  'Graphsync error': [/^LASSIE_(?!504)/],
-  'IPNI no advertisement': ['IPNI_ERROR_404', 'IPNI_NO_VALID_ADVERTISEMENT'],
-  'IPNI error': [/^IPNI_ERROR_/],
-  Other: [
+  'HTTP 5xx': [
+    /^HTTP_5/,
+    /^ERROR_5/,
+    'BAD_GATEWAY',
+    'GATEWAY_TIMEOUT'
+  ],
+  'Graphsync timeout': [
+    'LASSIE_504'
+  ],
+  'Graphsync error': [
+    /^LASSIE_(?!504)/
+  ],
+  'IPNI no advertisement': [
+    'IPNI_ERROR_404',
+    'IPNI_NO_VALID_ADVERTISEMENT',
+  ],
+  'IPNI error': [
+    /^IPNI_ERROR_/
+  ],
+  'Other': [
     'CANNOT_PARSE_CAR_FILE',
     'CAR_TOO_LARGE',
     'UNKNOWN_FETCH_ERROR',
