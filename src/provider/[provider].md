@@ -4,13 +4,16 @@ title: Storage Provider Summary
 ---
 
 ```js
-import { LineGraph } from "../components/line-graph.js";
-import { getDateXDaysAgo } from "../utils/date-utils.js";
+import { LineGraph } from '../components/line-graph.js'
+import { getDateXDaysAgo } from '../utils/date-utils.js'
 
-const rsrData = FileAttachment(`../data/${observable.params.provider}-spark-rsr-summary.json`).json();
-const ttfbData = FileAttachment(`../data/${observable.params.provider}-spark-retrieval-timings-summary.json`).json();
+const rsrData = FileAttachment(
+  `../data/${observable.params.provider}-spark-rsr-summary.json`,
+).json()
+const ttfbData = FileAttachment(
+  `../data/${observable.params.provider}-spark-retrieval-timings-summary.json`,
+).json()
 ```
-
 
 <div class="hero">
   <body><a href="/"><img src="../media/spark-logomark-blue-with-bbox.png" alt="Spark Logo" width="300" /></a><body>
@@ -19,12 +22,11 @@ const ttfbData = FileAttachment(`../data/${observable.params.provider}-spark-ret
 </div>
 
 ```js
-const start = view(Inputs.date({label: "Start", value: getDateXDaysAgo(180) }));
-const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
+const start = view(Inputs.date({ label: 'Start', value: getDateXDaysAgo(180) }))
+const end = view(Inputs.date({ label: 'End', value: getDateXDaysAgo(1) }))
 ```
 
 <h3>Stats for ${observable.params.provider}</h3>
-
 
 <div class="grid grid-cols-2">
   <div>
@@ -36,7 +38,6 @@ const end = view(Inputs.date({label: "End", value: getDateXDaysAgo(1) }));
     <body>The section shows the median of all TTFB values for successful retrieval checks of this storage provider.</body>
   </div>
 </div>
-
 
 <div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
   <div class="card">${
