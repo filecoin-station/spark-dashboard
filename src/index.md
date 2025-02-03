@@ -184,17 +184,6 @@ const percentiles = Object.entries(SparkMinerRsrSummaries).flatMap(
 
 <div class="divider"></div>
 
-<div class="grid grid-cols-2">
-  <div>
-    <h4>Spark Retrieval Result Codes</h4>
-    <body>This section shows the Spark Retrieval Result Codes breakdown.</body>
-  </div>
-  <div>
-    <h4>Spark Time To First Byte (TTFB)</h4>
-    <body>The section shows the median of all median TTFB values from all retrieval tasks.</body>
-  </div>
-</div>
-
 ```js
 // prettier-ignore
 const mapping = {
@@ -259,45 +248,53 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
 })
 ```
 
-<div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
-  <div class="card">
-    ${Plot.plot({
-      x: {label: null, type: "band", ticks: "week" },
-      y: {
-        percent: true
-      },
-      color: {
-        scheme: "Accent",
-        legend: "swatches",
-        width: 2000,
-        label: "Codes"
-      },
-      marks: [
-        Plot.rectY(tidy, {
-          x: "day",
-          y: "rate",
-          fill: "code",
-          offset: "normalize",
-          sort: {color: null, x: "-y" },
-          interval: 'day'
-        })
-      ]
-    })}
-  </div>
-  <div class="card">
+<div class="grid grid-cols-2">
+  <div>
+    <h4>Spark Retrieval Result Codes</h4>
+    <body>This section shows the Spark Retrieval Result Codes breakdown.</body>
+    <div class="card">
       ${Plot.plot({
-      title: 'Time to First Byte (ms)',
-      // TODO: Change tick to month once we have more data
-      x: { type: 'utc', ticks: 'day' },
-      y: { grid: true, zero: true},
-      marks: [
-        Plot.lineY(SparkRetrievalTimes, {
-          x: 'day',
-          y: 'ttfb_ms',
-          stroke: "#FFBD3F",
-        })
-      ]
-    })}
+        x: {label: null, type: "band", ticks: "week" },
+        y: {
+          percent: true
+        },
+        color: {
+          scheme: "Accent",
+          legend: "swatches",
+          width: 2000,
+          label: "Codes"
+        },
+        marks: [
+          Plot.rectY(tidy, {
+            x: "day",
+            y: "rate",
+            fill: "code",
+            offset: "normalize",
+            sort: {color: null, x: "-y" },
+            interval: 'day'
+          })
+        ]
+      })}
+    </div>
+  </div>
+  <div>
+    <h4>Spark Time To First Byte (TTFB)</h4>
+    <body>The section shows the median of all median TTFB values from all retrieval tasks.</body>
+    <div class="card">
+        ${Plot.plot({
+        title: 'Time to First Byte (ms)',
+        // TODO: Change tick to month once we have more data
+        x: { type: 'utc', ticks: 'day' },
+        y: { grid: true, zero: true},
+        marks: [
+          Plot.lineY(SparkRetrievalTimes, {
+            x: 'day',
+            y: 'ttfb_ms',
+            stroke: "#FFBD3F",
+          })
+        ]
+      })}
+    </div> 
   </div> 
 </div>
 
