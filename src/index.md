@@ -248,7 +248,7 @@ const tidy = clone(SparkRetrievalResultCodes).flatMap(({ day, rates }) => {
 })
 ```
 
-<div class="grid grid-cols-2">
+<div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
   <div>
     <h4>Spark Retrieval Result Codes</h4>
     <body>This section shows the Spark Retrieval Result Codes breakdown.</body>
