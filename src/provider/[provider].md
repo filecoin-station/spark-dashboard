@@ -28,22 +28,18 @@ const end = view(Inputs.date({ label: 'End', value: getDateXDaysAgo(1) }))
 
 <h3>Stats for ${observable.params.provider}</h3>
 
-<div class="grid grid-cols-2">
+<div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
   <div>
     <h4>Storage Provider Spark RSR Summary</h4>
     <body>This section shows the storage provider Spark Retrieval Success Rate Score summary.</body>
+    <div class="card">${
+      resize((width) => LineGraph(rsrData, {width, title: "Retrieval Success Rate", start, end }))
+    }</div>
   </div>
   <div>
     <h4>Storage Provider Spark Time To First Byte (TTFB)</h4>
     <body>The section shows the median of all TTFB values for successful retrieval checks of this storage provider.</body>
-  </div>
-</div>
-
-<div class="grid grid-cols-2" style="grid-auto-rows: 500px;">
-  <div class="card">${
-    resize((width) => LineGraph(rsrData, {width, title: "Retrieval Success Rate", start, end }))
-  }</div>
-  <div class="card">
+    <div class="card">
       ${Plot.plot({
       title: 'Time to First Byte (ms)',
       // TODO: Change tick to month once we have more data
@@ -57,6 +53,7 @@ const end = view(Inputs.date({ label: 'End', value: getDateXDaysAgo(1) }))
         })
       ]
     })}
+    </div>
   </div>
 </div>
 
